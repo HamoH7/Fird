@@ -14,16 +14,19 @@ public class DrawThread extends Thread {
     private  SurfaceHolder surfaceHolder;
     private float lastTouchX = 0;
     private float lastTouchY = 0;
-    private int m = 0, n = 0, m1 = 0, m2 = 0, m3 = 0, m4 = 0, eat = 0, e = 0, eatTimer = 10, m5 = 0, p = 0, playTimer = 15, play = 0;
-    private double h = (float)1/36;
-    private double s = (float) 1 / 96;
+    private float birdX = (float) 419/1050;
+    private float birdY = (float) 232/540;
+    private int m = 0, n = 0, m1 = 0, m2 = 0, m3 = 0, m4 = 0, eat = 0, e = 0, eatTimer = 10, m5 = 0, p = 0, playTimer = 15, sleepTimer = 60, play = 0, sleep = 0, r1 = 0, flyBack = 0;
+    private double h = (float)1/360;
+    private double s = (float) 1 / 960;
     private double q = (float) 1 / 54;
-    private double k = (float) 1 / 60;
+    private double k = (float) 1 / 600;
     private double food = (float) 1 / 10;
     private double smile = (float) 1 / 7;
+    private double qun = (float) 1 / 40;
     private float hungryRight = 0, happyRight = 0, sleepRight = 0, dirtRight = 0, lifeRight = 0;
-    private int life, dirt, hungry, sleep,happy;
-    private boolean ea = false, pl = false;
+    private int life, dirt, hungry, tired,happy;
+    private boolean ea = false, pl = false, sl = false, fl = false, sle = false;
     private boolean playingTimeIsPassed = false;
     private boolean playingNeedToDrawNow = false;
     private boolean checkPlayButton = false;
@@ -31,11 +34,25 @@ public class DrawThread extends Thread {
     private boolean playChecker = true;
     private boolean eating = false;
     private boolean playing = false;
+    private boolean flying = false;
+    private boolean laying = false;
+    private boolean sleeping = false;
+    private boolean flyingBack = false;
     private boolean eatChecker = true;
+    private boolean sleepChecker = true;
+    private boolean flyChecker = true;
     private boolean checkEatButton = false;
     private boolean drawEatButton = false;
+    private boolean checkSleepButton = false;
+    private boolean drawSleepButton = false;
     private boolean eatingTimeIsPassed = false;
     private boolean eatingNeedToDrawNow = false;
+    private boolean sleepingTimeIsPassed = false;
+    private boolean sleepingNeedToDrawNow = false;
+    private boolean flyingTimeIsPassed = false;
+    private boolean flyingNeedToDrawNow = false;
+    private boolean flyingBackTimeIsPassed = false;
+    private boolean flyingBackNeedToDrawNow = false;
     private boolean hungryTimeIsPassed = false;
     private boolean hungryNeedToDrawNow = false;
     private boolean happyTimeIsPassed = false;
@@ -48,14 +65,32 @@ public class DrawThread extends Thread {
     private boolean needToDrawNow1 = false;
     private boolean timeIsPassed2 = false;
     private boolean needToDrawNow2 = false;
+    private boolean timeIsPassedSleep1 = false;
+    private boolean needToDrawNowSleep1 = false;
+    private boolean timeIsPassedSleep2 = false;
+    private boolean needToDrawNowSleep2 = false;
+    private boolean timeIsPassedSle= false;
+    private boolean needToDrawNowSle = false;
+    private boolean sleepFinished = false;
     private boolean check = false;
+    private boolean checkSleep = false;
     private Bitmap eat1Bitmap, eat2Bitmap, eat3Bitmap, eat4Bitmap, eat5Bitmap, eat6Bitmap, eat7Bitmap, eat8Bitmap, eat9Bitmap, eat10Bitmap;
     private Bitmap eatDarkButtonBitmap1, eatDarkButtonBitmap2, eatDarkButtonBitmap3, eatDarkButtonBitmap4, eatDarkButtonBitmap5,
             eatDarkButtonBitmap6, eatDarkButtonBitmap7, eatDarkButtonBitmap8, eatDarkButtonBitmap9, eatDarkButtonBitmap10;
     private Bitmap play1Bitmap, play2Bitmap, play3Bitmap, play4Bitmap, play5Bitmap, play6Bitmap, play7Bitmap, play8Bitmap, play9Bitmap, play10Bitmap, play11Bitmap, play12Bitmap, play13Bitmap, play14Bitmap, play15Bitmap, play16Bitmap, play17Bitmap, play18Bitmap, play19Bitmap, play20Bitmap;
+    private Bitmap play1BitmapD, play2BitmapD, play3BitmapD, play4BitmapD, play5BitmapD, play6BitmapD, play7BitmapD, play8BitmapD, play9BitmapD, play10BitmapD, play11BitmapD, play12BitmapD, play13BitmapD, play14BitmapD, play15BitmapD, play16BitmapD, play17BitmapD, play18BitmapD, play19BitmapD, play20BitmapD;
+    private Bitmap play1BitmapDT, play2BitmapDT, play3BitmapDT, play4BitmapDT, play5BitmapDT, play6BitmapDT, play7BitmapDT, play8BitmapDT, play9BitmapDT, play10BitmapDT, play11BitmapDT, play12BitmapDT, play13BitmapDT, play14BitmapDT, play15BitmapDT, play16BitmapDT, play17BitmapDT, play18BitmapDT, play19BitmapDT, play20BitmapDT;
+    private Bitmap play1BitmapT, play2BitmapT, play3BitmapT, play4BitmapT, play5BitmapT, play6BitmapT, play7BitmapT, play8BitmapT, play9BitmapT, play10BitmapT, play11BitmapT, play12BitmapT, play13BitmapT, play14BitmapT, play15BitmapT, play16BitmapT, play17BitmapT, play18BitmapT, play19BitmapT, play20BitmapT;
     private Bitmap playDarkButtonBitmap1, playDarkButtonBitmap2, playDarkButtonBitmap3, playDarkButtonBitmap4, playDarkButtonBitmap5,
             playDarkButtonBitmap6, playDarkButtonBitmap7, playDarkButtonBitmap8, playDarkButtonBitmap9, playDarkButtonBitmap10, playDarkButtonBitmap11, playDarkButtonBitmap12, playDarkButtonBitmap13, playDarkButtonBitmap14, playDarkButtonBitmap15;
     private Bitmap playButtonBitmap, playButtonBitmap2;
+    private Bitmap sleepDarkButtonBitmap1, sleepDarkButtonBitmap2, sleepDarkButtonBitmap3, sleepDarkButtonBitmap4, sleepDarkButtonBitmap5, sleepDarkButtonBitmap6, sleepDarkButtonBitmap7, sleepDarkButtonBitmap8, sleepDarkButtonBitmap9, sleepDarkButtonBitmap10,
+            sleepDarkButtonBitmap11, sleepDarkButtonBitmap12, sleepDarkButtonBitmap13, sleepDarkButtonBitmap14, sleepDarkButtonBitmap15, sleepDarkButtonBitmap16, sleepDarkButtonBitmap17, sleepDarkButtonBitmap18, sleepDarkButtonBitmap19, sleepDarkButtonBitmap20,
+            sleepDarkButtonBitmap21, sleepDarkButtonBitmap22, sleepDarkButtonBitmap23, sleepDarkButtonBitmap24, sleepDarkButtonBitmap25, sleepDarkButtonBitmap26, sleepDarkButtonBitmap27, sleepDarkButtonBitmap28, sleepDarkButtonBitmap29, sleepDarkButtonBitmap30,
+            sleepDarkButtonBitmap31, sleepDarkButtonBitmap32, sleepDarkButtonBitmap33, sleepDarkButtonBitmap34, sleepDarkButtonBitmap35, sleepDarkButtonBitmap36, sleepDarkButtonBitmap37, sleepDarkButtonBitmap38, sleepDarkButtonBitmap39, sleepDarkButtonBitmap40,
+            sleepDarkButtonBitmap41, sleepDarkButtonBitmap42, sleepDarkButtonBitmap43, sleepDarkButtonBitmap44, sleepDarkButtonBitmap45, sleepDarkButtonBitmap46, sleepDarkButtonBitmap47, sleepDarkButtonBitmap48, sleepDarkButtonBitmap49, sleepDarkButtonBitmap50,
+            sleepDarkButtonBitmap51, sleepDarkButtonBitmap52, sleepDarkButtonBitmap53, sleepDarkButtonBitmap54, sleepDarkButtonBitmap55, sleepDarkButtonBitmap56, sleepDarkButtonBitmap57, sleepDarkButtonBitmap58, sleepDarkButtonBitmap59, sleepDarkButtonBitmap60;
+    private Bitmap sleepButtonBitmap, sleepButtonBitmap2;
     private Bitmap bitmapGrass,bitmapbg,bitmapkust,bitmapHeart, bitmapDirt, bitmapHungry,bitmapSleep, bitmapHappy, eatButtonBitmap, eatButtonBitmap2, highScoreBitmap, scoreBitmap;
     private Bitmap bitmap, bitmapDTSH1, bitmapDTSH2, bitmapDTS1, bitmapDTS2, bitmapDTH1, bitmapDTH2, bitmapDSH1, bitmapDSH2, bitmapTSH1, bitmapTSH2,
             bitmapDH1, bitmapDH2, bitmapDS1, bitmapDS2, bitmapDT1, bitmapDT2, bitmapSH1, bitmapSH2, bitmapTH1,bitmapTH2,bitmapTS1,bitmapTS2
@@ -68,6 +103,8 @@ public class DrawThread extends Thread {
     private Bitmap eat1BitmapT, eat2BitmapT, eat3BitmapT, eat4BitmapT, eat5BitmapT, eat6BitmapT, eat7BitmapT, eat8BitmapT, eat9BitmapT, eat10BitmapT;
     private Bitmap eat1BitmapTS, eat2BitmapTS, eat3BitmapTS, eat4BitmapTS, eat5BitmapTS, eat6BitmapTS, eat7BitmapTS, eat8BitmapTS, eat9BitmapTS, eat10BitmapTS;
     private Bitmap eat1BitmapSmile, eat2BitmapSmile, eat3BitmapSmile, eat4BitmapSmile, eat5BitmapSmile, eat6BitmapSmile, eat7BitmapSmile, eat8BitmapSmile, eat9BitmapSmile, eat10BitmapSmile;
+    private Bitmap bitmapDarkbg,bitmapDarkkust;
+    private Bitmap fly1Bitmap,fly2Bitmap,layBitmap, sleepBitmap1,sleepBitmap2, fly3Bitmap, fly4Bitmap;
     private volatile boolean running = true;
     Paint paint = new Paint();
     Paint paintLife = new Paint();
@@ -142,6 +179,73 @@ public class DrawThread extends Thread {
         play18Bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox18);
         play19Bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox19);
         play20Bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox20);
+        play1BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox1);
+        play2BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox2);
+        play3BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox3);
+        play4BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox4);
+        play5BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox5);
+        play6BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox6);
+        play7BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox7);
+        play8BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox8);
+        play9BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox9);
+        play10BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox10);
+        play11BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox11);
+        play12BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox12);
+        play13BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox13);
+        play14BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox14);
+        play15BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox15);
+        play16BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox16);
+        play17BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox17);
+        play18BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox18);
+        play19BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox19);
+        play20BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox20);
+        play1BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox1);
+        play2BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox2);
+        play3BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox3);
+        play4BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox4);
+        play5BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox5);
+        play6BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox6);
+        play7BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox7);
+        play8BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox8);
+        play9BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox9);
+        play10BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox10);
+        play11BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox11);
+        play12BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox12);
+        play13BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox13);
+        play14BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox14);
+        play15BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox15);
+        play16BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox16);
+        play17BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox17);
+        play18BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox18);
+        play19BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.t_xaxacox19);
+        play20BitmapT = BitmapFactory.decodeResource(context.getResources(),R.drawable.t_xaxacox20);
+        play1BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox1);
+        play2BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox2);
+        play3BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox3);
+        play4BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox4);
+        play5BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox5);
+        play6BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox6);
+        play7BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox7);
+        play8BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox8);
+        play9BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox9);
+        play10BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox10);
+        play11BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox11);
+        play12BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox12);
+        play13BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox13);
+        play14BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox14);
+        play15BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox15);
+        play16BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox16);
+        play17BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox17);
+        play18BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox18);
+        play19BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_t_xaxacox19);
+        play20BitmapDT = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_t_xaxacox20);
+        fly1Bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.trnox_cit1);
+        fly2Bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.trnox_cit2);
+        fly3Bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.trnox_cit3);
+        fly4Bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.trnox_cit4);
+        layBitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.parkac);
+        sleepBitmap1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.qnac1);
+        sleepBitmap2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.qnac2);
         eat1BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.e_d_1);
         eat2BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.e_d_2);
         eat3BitmapD = BitmapFactory.decodeResource(context.getResources(),R.drawable.e_d_3);
@@ -247,8 +351,70 @@ public class DrawThread extends Thread {
         playDarkButtonBitmap13 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mp13);
         playDarkButtonBitmap14 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mp14);
         playDarkButtonBitmap15 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mp15);
+        sleepDarkButtonBitmap1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.mq1);
+        sleepDarkButtonBitmap2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.mq2);
+        sleepDarkButtonBitmap3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.mq3);
+        sleepDarkButtonBitmap4 = BitmapFactory.decodeResource(context.getResources(), R.drawable.mq4);
+        sleepDarkButtonBitmap5 = BitmapFactory.decodeResource(context.getResources(), R.drawable.mq5);
+        sleepDarkButtonBitmap6 = BitmapFactory.decodeResource(context.getResources(), R.drawable.mq6);
+        sleepDarkButtonBitmap7 = BitmapFactory.decodeResource(context.getResources(), R.drawable.mq7);
+        sleepDarkButtonBitmap8 = BitmapFactory.decodeResource(context.getResources(), R.drawable.mq8);
+        sleepDarkButtonBitmap9 = BitmapFactory.decodeResource(context.getResources(), R.drawable.mq9);
+        sleepDarkButtonBitmap10 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq10);
+        sleepDarkButtonBitmap11 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq11);
+        sleepDarkButtonBitmap12 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq12);
+        sleepDarkButtonBitmap13 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq13);
+        sleepDarkButtonBitmap14 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq14);
+        sleepDarkButtonBitmap15 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq15);
+        sleepDarkButtonBitmap16 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq16);
+        sleepDarkButtonBitmap17 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq17);
+        sleepDarkButtonBitmap18 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq18);
+        sleepDarkButtonBitmap19 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq19);
+        sleepDarkButtonBitmap20 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq20);
+        sleepDarkButtonBitmap21 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq21);
+        sleepDarkButtonBitmap22 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq22);
+        sleepDarkButtonBitmap23 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq23);
+        sleepDarkButtonBitmap24 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq24);
+        sleepDarkButtonBitmap25 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq25);
+        sleepDarkButtonBitmap26 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq26);
+        sleepDarkButtonBitmap27 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq27);
+        sleepDarkButtonBitmap28 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq28);
+        sleepDarkButtonBitmap29 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq29);
+        sleepDarkButtonBitmap30 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq30);
+        sleepDarkButtonBitmap31 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq31);
+        sleepDarkButtonBitmap32 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq32);
+        sleepDarkButtonBitmap33 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq33);
+        sleepDarkButtonBitmap34 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq34);
+        sleepDarkButtonBitmap35 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq35);
+        sleepDarkButtonBitmap36 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq36);
+        sleepDarkButtonBitmap37 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq37);
+        sleepDarkButtonBitmap38 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq38);
+        sleepDarkButtonBitmap39 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq39);
+        sleepDarkButtonBitmap40 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq40);
+        sleepDarkButtonBitmap41 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq41);
+        sleepDarkButtonBitmap42 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq42);
+        sleepDarkButtonBitmap43 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq43);
+        sleepDarkButtonBitmap44 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq44);
+        sleepDarkButtonBitmap45 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq45);
+        sleepDarkButtonBitmap46 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq46);
+        sleepDarkButtonBitmap47 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq47);
+        sleepDarkButtonBitmap48 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq48);
+        sleepDarkButtonBitmap49 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq49);
+        sleepDarkButtonBitmap50 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq50);
+        sleepDarkButtonBitmap51 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq51);
+        sleepDarkButtonBitmap52 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq52);
+        sleepDarkButtonBitmap53 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq53);
+        sleepDarkButtonBitmap54 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq54);
+        sleepDarkButtonBitmap55 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq55);
+        sleepDarkButtonBitmap56 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq56);
+        sleepDarkButtonBitmap57 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq57);
+        sleepDarkButtonBitmap58 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq58);
+        sleepDarkButtonBitmap59 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq59);
+        sleepDarkButtonBitmap60 = BitmapFactory.decodeResource(context.getResources(),R.drawable.mq60);
         bitmapGrass = BitmapFactory.decodeResource(context.getResources(), R.drawable.xot);
-        bitmapbg = BitmapFactory.decodeResource(context.getResources(), R.drawable.erkinq);
+        bitmapbg = BitmapFactory.decodeResource(context.getResources(), R.drawable.background1);
+        bitmapDarkbg = BitmapFactory.decodeResource(context.getResources(), R.drawable.background2);
+        bitmapDarkkust = BitmapFactory.decodeResource(context.getResources(), R.drawable.kustik2);
         bitmapkust = BitmapFactory.decodeResource(context.getResources(), R.drawable.kustik);
         bitmapHeart = BitmapFactory.decodeResource(context.getResources(), R.drawable.srtik);
         bitmapDirt = BitmapFactory.decodeResource(context.getResources(),R.drawable.kextik);
@@ -259,13 +425,15 @@ public class DrawThread extends Thread {
         eatButtonBitmap2 =  BitmapFactory.decodeResource(context.getResources(),R.drawable.chervyak);
         playButtonBitmap =  BitmapFactory.decodeResource(context.getResources(), R.drawable.petur);
         playButtonBitmap2 =  BitmapFactory.decodeResource(context.getResources(),R.drawable.petur);
+        sleepButtonBitmap =  BitmapFactory.decodeResource(context.getResources(), R.drawable.qnel);
+        sleepButtonBitmap2 =  BitmapFactory.decodeResource(context.getResources(),R.drawable.qnel);
         highScoreBitmap =  BitmapFactory.decodeResource(context.getResources(),R.drawable.highscore);
         scoreBitmap =  BitmapFactory.decodeResource(context.getResources(),R.drawable.score);
         bitmap = bitmapSmile1;
         life = ResourcesCompat.getColor(context.getResources(),R.color.life,null);
         dirt = ResourcesCompat.getColor(context.getResources(),R.color.dirt,null);
         hungry = ResourcesCompat.getColor(context.getResources(),R.color.hungry,null);
-        sleep = ResourcesCompat.getColor(context.getResources(),R.color.sleep,null);
+        tired = ResourcesCompat.getColor(context.getResources(),R.color.sleep,null);
         happy = ResourcesCompat.getColor(context.getResources(),R.color.happy,null);
     }
 
@@ -284,18 +452,25 @@ public class DrawThread extends Thread {
             Canvas canvas = surfaceHolder.lockCanvas();
             if (canvas != null) {
                 try {
+
                     paintBlack.setColor(Color.BLACK);
                     paintBlack.setStyle(Paint.Style.STROKE);
                     paintBlack.setStrokeWidth((float) canvas.getWidth()/540);
                     // background
-                    bitmapGrass = Bitmap.createScaledBitmap(bitmapGrass,canvas.getWidth(),canvas.getHeight()/2,true);
                     bitmapbg = Bitmap.createScaledBitmap(bitmapbg,canvas.getWidth(),canvas.getHeight(),true);
+                    bitmapDarkbg = Bitmap.createScaledBitmap(bitmapDarkbg,canvas.getWidth(),canvas.getHeight(),true);
                     bitmapkust = Bitmap.createScaledBitmap(bitmapkust,canvas.getWidth()*245/1050,canvas.getHeight()*180/540,true);
+                    bitmapDarkkust = Bitmap.createScaledBitmap(bitmapDarkkust,canvas.getWidth()*245/1050,canvas.getHeight()*180/540,true);
                     paint.setSubpixelText(true);paint.setAntiAlias(true);paintLife.setSubpixelText(true);paintLife.setAntiAlias(true);paintBlack.setSubpixelText(true);paintBlack.setAntiAlias(true);
                     //hetevi fon
-                    canvas.drawBitmap(bitmapbg,0,0,paint);
-                    canvas.drawBitmap(bitmapGrass,0,(float)canvas.getHeight() / 2,paint);
-                    canvas.drawBitmap(bitmapkust,(float) canvas.getWidth()*29/1050,(float)canvas.getHeight() *230/540,paint);
+                    if(!flying && !sleeping && !laying) {
+                        canvas.drawBitmap(bitmapbg, 0, 0, paint);
+                        canvas.drawBitmap(bitmapkust, (float) canvas.getWidth() * 29 / 1050, (float) canvas.getHeight() * 230 / 540, paint);
+                    }
+                    else{
+                        canvas.drawBitmap(bitmapDarkbg, 0, 0, paint);
+                        canvas.drawBitmap(bitmapDarkkust, (float) canvas.getWidth() * 29 / 1050, (float) canvas.getHeight() * 230 / 540, paint);
+                    }
                     // highscore/score
                     highScoreBitmap = Bitmap.createScaledBitmap(highScoreBitmap,canvas.getWidth()*212/1050,canvas.getHeight()*53/540,true);
                     canvas.drawBitmap(highScoreBitmap,0,(float)canvas.getHeight()*10/540,paint);
@@ -370,7 +545,7 @@ public class DrawThread extends Thread {
                         hungryNeedToDrawNow = false;
                     }
                     // qun
-                    paintSleep.setColor(sleep);
+                    paintSleep.setColor(tired);
                     float sleepLeft = (float) canvas.getWidth()*877/1050;
                     float sleepTop = (float) canvas.getHeight()*129/540;
                     float sleepRight2 = (float) canvas.getWidth()*1040/1050;
@@ -381,7 +556,7 @@ public class DrawThread extends Thread {
                             (float) canvas.getWidth()*1041/1050, (float) canvas.getHeight()*154/540,paintBlack);
                     canvas.drawRect(sleepLeft, sleepTop, sleepRight, sleepBottom, paintSleep);
                     // qni timer
-                    if(!sleepTimeIsPassed){
+                    if(!sleepTimeIsPassed && !sleeping){
                         new SleepTimerThread().start();
                         sleepTimeIsPassed = true;
                     }
@@ -659,10 +834,78 @@ public class DrawThread extends Thread {
                     play18Bitmap =Bitmap.createScaledBitmap(play18Bitmap,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
                     play19Bitmap =Bitmap.createScaledBitmap(play19Bitmap,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
                     play20Bitmap =Bitmap.createScaledBitmap(play20Bitmap,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play1BitmapD = Bitmap.createScaledBitmap(play1BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play2BitmapD = Bitmap.createScaledBitmap(play2BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play3BitmapD = Bitmap.createScaledBitmap(play3BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play4BitmapD = Bitmap.createScaledBitmap(play4BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play5BitmapD = Bitmap.createScaledBitmap(play5BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play6BitmapD = Bitmap.createScaledBitmap(play6BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play7BitmapD = Bitmap.createScaledBitmap(play7BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play8BitmapD = Bitmap.createScaledBitmap(play8BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play9BitmapD = Bitmap.createScaledBitmap(play9BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play10BitmapD =Bitmap.createScaledBitmap(play10BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play11BitmapD =Bitmap.createScaledBitmap(play11BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play12BitmapD =Bitmap.createScaledBitmap(play12BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play13BitmapD =Bitmap.createScaledBitmap(play13BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play14BitmapD =Bitmap.createScaledBitmap(play14BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play15BitmapD =Bitmap.createScaledBitmap(play15BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play16BitmapD =Bitmap.createScaledBitmap(play16BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play17BitmapD =Bitmap.createScaledBitmap(play17BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play18BitmapD =Bitmap.createScaledBitmap(play18BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play19BitmapD =Bitmap.createScaledBitmap(play19BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play20BitmapD =Bitmap.createScaledBitmap(play20BitmapD,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play1BitmapDT = Bitmap.createScaledBitmap(play1BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play2BitmapDT = Bitmap.createScaledBitmap(play2BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play3BitmapDT = Bitmap.createScaledBitmap(play3BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play4BitmapDT = Bitmap.createScaledBitmap(play4BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play5BitmapDT = Bitmap.createScaledBitmap(play5BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play6BitmapDT = Bitmap.createScaledBitmap(play6BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play7BitmapDT = Bitmap.createScaledBitmap(play7BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play8BitmapDT = Bitmap.createScaledBitmap(play8BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play9BitmapDT = Bitmap.createScaledBitmap(play9BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play10BitmapDT =Bitmap.createScaledBitmap(play10BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play11BitmapDT =Bitmap.createScaledBitmap(play11BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play12BitmapDT =Bitmap.createScaledBitmap(play12BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play13BitmapDT =Bitmap.createScaledBitmap(play13BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play14BitmapDT =Bitmap.createScaledBitmap(play14BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play15BitmapDT =Bitmap.createScaledBitmap(play15BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play16BitmapDT =Bitmap.createScaledBitmap(play16BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play17BitmapDT =Bitmap.createScaledBitmap(play17BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play18BitmapDT =Bitmap.createScaledBitmap(play18BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play19BitmapDT =Bitmap.createScaledBitmap(play19BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play20BitmapDT =Bitmap.createScaledBitmap(play20BitmapDT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play1BitmapT = Bitmap.createScaledBitmap(play1BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play2BitmapT = Bitmap.createScaledBitmap(play2BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play3BitmapT = Bitmap.createScaledBitmap(play3BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play4BitmapT = Bitmap.createScaledBitmap(play4BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play5BitmapT = Bitmap.createScaledBitmap(play5BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play6BitmapT = Bitmap.createScaledBitmap(play6BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play7BitmapT = Bitmap.createScaledBitmap(play7BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play8BitmapT = Bitmap.createScaledBitmap(play8BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play9BitmapT = Bitmap.createScaledBitmap(play9BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play10BitmapT =Bitmap.createScaledBitmap(play10BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play11BitmapT =Bitmap.createScaledBitmap(play11BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play12BitmapT =Bitmap.createScaledBitmap(play12BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play13BitmapT =Bitmap.createScaledBitmap(play13BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play14BitmapT =Bitmap.createScaledBitmap(play14BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play15BitmapT =Bitmap.createScaledBitmap(play15BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play16BitmapT =Bitmap.createScaledBitmap(play16BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play17BitmapT =Bitmap.createScaledBitmap(play17BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play18BitmapT =Bitmap.createScaledBitmap(play18BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play19BitmapT =Bitmap.createScaledBitmap(play19BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    play20BitmapT =Bitmap.createScaledBitmap(play20BitmapT,canvas.getWidth() * 189 / 1050,canvas.getHeight()*172/540,true);
+                    // qnox cit
+                    fly1Bitmap = Bitmap.createScaledBitmap(fly1Bitmap,canvas.getWidth() * 145 / 1050,canvas.getHeight()*179/540,true);
+                    fly2Bitmap = Bitmap.createScaledBitmap(fly2Bitmap,canvas.getWidth() * 145 / 1050,canvas.getHeight()*179/540,true);
+                    fly3Bitmap = Bitmap.createScaledBitmap(fly3Bitmap,canvas.getWidth() * 145 / 1050,canvas.getHeight()*179/540,true);
+                    fly4Bitmap = Bitmap.createScaledBitmap(fly4Bitmap,canvas.getWidth() * 145 / 1050,canvas.getHeight()*179/540,true);
+                    layBitmap = Bitmap.createScaledBitmap(layBitmap,canvas.getWidth() * 195 / 1050,canvas.getHeight()*166/540,true);
+                    sleepBitmap1 =  Bitmap.createScaledBitmap(sleepBitmap1,canvas.getWidth() * 195 / 1050,canvas.getHeight()*166/540,true);
+                    sleepBitmap2 =  Bitmap.createScaledBitmap(sleepBitmap2,canvas.getWidth() * 195 / 1050,canvas.getHeight()*166/540,true);
                     // cit
-                    canvas.drawBitmap(bitmap,(float) canvas.getWidth() * 419/1050,(float) canvas.getHeight()*232/540,paint);
+                    canvas.drawBitmap(bitmap,(float) canvas.getWidth() *birdX,(float) canvas.getHeight()*birdY,paint);
                     //shnchel
-                    if(!eating && !playing) {
+                    if(!eating && !playing && !flying && !sleeping && !laying) {
                         if (!timeIsPassed1 && !check) {
                             new ThreadBird1().start();
                             timeIsPassed1 = true;
@@ -815,8 +1058,269 @@ public class DrawThread extends Thread {
                         }
                     }
                     canvas.drawBitmap(playButtonBitmap,playButtonLeft,playButtonTop,paint);
+                    //qnelu knopken
+                    int sleepButtonWidth = canvas.getWidth()*106/1050;
+                    int sleepButtonHeight = canvas.getHeight()*101/540;
+                    float sleepButtonLeft = (float) canvas.getWidth()*241/1050;
+                    float sleepButtonTop = (float) canvas.getHeight()*427/540;
+                    sleepDarkButtonBitmap1 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap1,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap2 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap2,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap3 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap3,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap4 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap4,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap5 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap5,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap6 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap6,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap7 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap7,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap8 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap8,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap9 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap9,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap10 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap10,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap11 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap11,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap12 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap12,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap13 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap13,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap14 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap14,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap15 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap15,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap16 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap16,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap17 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap17,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap18 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap18,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap19 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap19,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap20 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap20,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap21 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap21,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap22 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap22,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap23 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap23,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap24 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap24,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap25 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap25,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap26 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap26,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap27 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap27,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap28 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap28,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap29 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap29,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap30 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap30,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap31 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap31,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap32 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap32,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap33 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap33,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap34 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap34,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap35 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap35,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap36 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap36,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap37 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap37,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap38 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap38,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap39 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap39,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap40 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap40,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap41 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap41,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap42 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap42,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap43 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap43,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap44 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap44,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap45 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap45,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap46 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap46,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap47 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap47,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap48 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap48,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap49 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap49,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap50 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap50,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap51 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap51,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap52 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap52,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap53 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap53,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap54 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap54,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap55 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap55,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap56 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap56,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap57 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap57,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap58 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap58,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap59 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap59,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepDarkButtonBitmap60 = Bitmap.createScaledBitmap(sleepDarkButtonBitmap60,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepButtonBitmap = Bitmap.createScaledBitmap(sleepButtonBitmap,sleepButtonWidth, sleepButtonHeight,true);
+                    sleepButtonBitmap2 = Bitmap.createScaledBitmap(sleepButtonBitmap2,sleepButtonWidth, sleepButtonHeight,true);
+                    if(!sleepChecker && checkSleepButton){
+                        new SleepDarkButtonThread().start();
+                        canvas.drawCircle(100,100,100,paintDirt);
+                        checkSleepButton = false;
+                    }
+                    if(drawSleepButton){
+                        switch (sleepTimer){
+                            case 59:
+                                sleepButtonBitmap = sleepDarkButtonBitmap59;
+                                break;
+                            case 58:
+                                sleepButtonBitmap = sleepDarkButtonBitmap58;
+                                break;
+                            case 57:
+                                sleepButtonBitmap = sleepDarkButtonBitmap57;
+                                break;
+                            case 56:
+                                sleepButtonBitmap = sleepDarkButtonBitmap56;
+                                break;
+                            case 55:
+                                sleepButtonBitmap = sleepDarkButtonBitmap55;
+                                break;
+                            case 54:
+                                sleepButtonBitmap = sleepDarkButtonBitmap54;
+                                break;
+                            case 53:
+                                sleepButtonBitmap = sleepDarkButtonBitmap53;
+                                break;
+                            case 52:
+                                sleepButtonBitmap = sleepDarkButtonBitmap52;
+                                break;
+                            case 51:
+                                sleepButtonBitmap = sleepDarkButtonBitmap51;
+                                break;
+                            case 50:
+                                sleepButtonBitmap = sleepDarkButtonBitmap50;
+                                break;
+                            case 49:
+                                sleepButtonBitmap = sleepDarkButtonBitmap49;
+                                break;
+                            case 48:
+                                sleepButtonBitmap = sleepDarkButtonBitmap48;
+                                break;
+                            case 47:
+                                sleepButtonBitmap = sleepDarkButtonBitmap47;
+                                break;
+                            case 46:
+                                sleepButtonBitmap = sleepDarkButtonBitmap46;
+                                break;
+                            case 45:
+                                sleepButtonBitmap = sleepDarkButtonBitmap45;
+                                break;
+                            case 44:
+                                sleepButtonBitmap = sleepDarkButtonBitmap44;
+                                break;
+                            case 43:
+                                sleepButtonBitmap = sleepDarkButtonBitmap43;
+                                break;
+                            case 42:
+                                sleepButtonBitmap = sleepDarkButtonBitmap42;
+                                break;
+                            case 41:
+                                sleepButtonBitmap = sleepDarkButtonBitmap41;
+                                break;
+                            case 40:
+                                sleepButtonBitmap = sleepDarkButtonBitmap40;
+                                break;
+                            case 39:
+                                sleepButtonBitmap = sleepDarkButtonBitmap39;
+                                break;
+                            case 38:
+                                sleepButtonBitmap = sleepDarkButtonBitmap38;
+                                break;
+                            case 37:
+                                sleepButtonBitmap = sleepDarkButtonBitmap37;
+                                break;
+                            case 36:
+                                sleepButtonBitmap = sleepDarkButtonBitmap36;
+                                break;
+                            case 35:
+                                sleepButtonBitmap = sleepDarkButtonBitmap35;
+                                break;
+                            case 34:
+                                sleepButtonBitmap = sleepDarkButtonBitmap34;
+                                break;
+                            case 33:
+                                sleepButtonBitmap = sleepDarkButtonBitmap33;
+                                break;
+                            case 32:
+                                sleepButtonBitmap = sleepDarkButtonBitmap32;
+                                break;
+                            case 31:
+                                sleepButtonBitmap = sleepDarkButtonBitmap31;
+                                break;
+                            case 30:
+                                sleepButtonBitmap = sleepDarkButtonBitmap30;
+                                break;
+                            case 29:
+                                sleepButtonBitmap = sleepDarkButtonBitmap29;
+                                break;
+                            case 28:
+                                sleepButtonBitmap = sleepDarkButtonBitmap28;
+                                break;
+                            case 27:
+                                sleepButtonBitmap = sleepDarkButtonBitmap27;
+                                break;
+                            case 26:
+                                sleepButtonBitmap = sleepDarkButtonBitmap26;
+                                break;
+                            case 25:
+                                sleepButtonBitmap = sleepDarkButtonBitmap25;
+                                break;
+                            case 24:
+                                sleepButtonBitmap = sleepDarkButtonBitmap24;
+                                break;
+                            case 23:
+                                sleepButtonBitmap = sleepDarkButtonBitmap23;
+                                break;
+                            case 22:
+                                sleepButtonBitmap = sleepDarkButtonBitmap22;
+                                break;
+                            case 21:
+                                sleepButtonBitmap = sleepDarkButtonBitmap21;
+                                break;
+                            case 20:
+                                sleepButtonBitmap = sleepDarkButtonBitmap20;
+                                break;
+                            case 19:
+                                sleepButtonBitmap = sleepDarkButtonBitmap19;
+                                break;
+                            case 18:
+                                sleepButtonBitmap = sleepDarkButtonBitmap18;
+                                break;
+                            case 17:
+                                sleepButtonBitmap = sleepDarkButtonBitmap17;
+                                break;
+                            case 16:
+                                sleepButtonBitmap = sleepDarkButtonBitmap16;
+                                break;
+                            case 15:
+                                sleepButtonBitmap = sleepDarkButtonBitmap15;
+                                break;
+                            case 14:
+                                sleepButtonBitmap = sleepDarkButtonBitmap14;
+                                break;
+                            case 13:
+                                sleepButtonBitmap = sleepDarkButtonBitmap13;
+                                break;
+                            case 12:
+                                sleepButtonBitmap = sleepDarkButtonBitmap12;
+                                break;
+                            case 11:
+                                sleepButtonBitmap = sleepDarkButtonBitmap11;
+                                break;
+                            case 10:
+                                sleepButtonBitmap = sleepDarkButtonBitmap10;
+                                break;
+                            case 9:
+                                sleepButtonBitmap = sleepDarkButtonBitmap9;
+                                break;
+                            case 8:
+                                sleepButtonBitmap = sleepDarkButtonBitmap8;
+                                break;
+                            case 7:
+                                sleepButtonBitmap = sleepDarkButtonBitmap7;
+                                break;
+                            case 6:
+                                sleepButtonBitmap = sleepDarkButtonBitmap6;
+                                break;
+                            case 5:
+                                sleepButtonBitmap = sleepDarkButtonBitmap5;
+                                break;
+                            case 4:
+                                sleepButtonBitmap = sleepDarkButtonBitmap4;
+                                break;
+                            case 3:
+                                sleepButtonBitmap = sleepDarkButtonBitmap3;
+                                break;
+                            case 2:
+                                sleepButtonBitmap = sleepDarkButtonBitmap2;
+                                break;
+                            case 1:
+                                sleepButtonBitmap = sleepDarkButtonBitmap1;
+                                sleepChecker = true;
+                                lastTouchX = 0;
+                                lastTouchY = 0;
+                                m5 = 0;
+                                break;
+                            case 0:
+                                sleepButtonBitmap = sleepButtonBitmap2;
+                                break;
+                        }
+                    }
+                    canvas.drawBitmap(sleepButtonBitmap,sleepButtonLeft,sleepButtonTop,paint);
                     // utel
-                    if(lastTouchX >= eatButtonLeft && lastTouchX <= eatButtonLeft + eatButtonWidth && lastTouchY >= eatButtonTop && lastTouchY <= eatButtonTop + eatButtonHeight && eatChecker && !playing) {
+                    if(lastTouchX >= eatButtonLeft && lastTouchX <= eatButtonLeft + eatButtonWidth && lastTouchY >= eatButtonTop && lastTouchY <= eatButtonTop + eatButtonHeight && eatChecker && !playing && !sleeping && !laying && !flying && !flyingBack) {
                         if(e == 0) {
                             food *= (hungryRight2 - hungryLeft);
                             if (hungryRight + food > hungryRight2) {
@@ -959,7 +1463,7 @@ public class DrawThread extends Thread {
                         }
                     }
                     //xndal
-                    if(lastTouchX >= playButtonLeft && lastTouchX <= playButtonLeft + playButtonWidth && lastTouchY >= playButtonTop && lastTouchY <= playButtonTop + playButtonHeight && playChecker && !eating) {
+                    if(lastTouchX >= playButtonLeft && lastTouchX <= playButtonLeft + playButtonWidth && lastTouchY >= playButtonTop && lastTouchY <= playButtonTop + playButtonHeight && playChecker && !eating && !sleeping && !laying && !flying && !flyingBack) {
                         if(p == 0) {
                             smile *= (happyRight2 - happyLeft);
                             if (happyRight + smile > happyRight2) {
@@ -980,64 +1484,124 @@ public class DrawThread extends Thread {
                     if(playingNeedToDrawNow && playing){
                         switch (play){
                             case 1:
-                                bitmap = play1Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1) bitmap = play1BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1) bitmap = play1BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1) bitmap = play1BitmapT;
+                                else if(bitmap1 == bitmapUsual1 || bitmap1 == bitmapH1 || bitmap1 == bitmapS1 || bitmap1 == bitmapSmile1) bitmap = play1Bitmap;
                                 break;
                             case 2:
-                                bitmap = play2Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play2BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play2BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play2BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play2Bitmap;
                                 break;
                             case 3:
-                                bitmap = play3Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play3BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play3BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play3BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play3Bitmap;
                                 break;
                             case 4:
-                                bitmap = play4Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play4BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play4BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play4BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play4Bitmap;
                                 break;
                             case 5:
-                                bitmap = play5Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play5BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play5BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play5BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play5Bitmap;
                                 break;
                             case 6:
-                                bitmap = play6Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play6BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play6BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play6BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play6Bitmap;
                                 break;
                             case 7:
-                                bitmap = play7Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play7BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play7BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play7BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play7Bitmap;
                                 break;
                             case 8:
-                                bitmap = play8Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play8BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play8BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play8BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play8Bitmap;
                                 break;
                             case 9:
-                                bitmap = play9Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play9BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play9BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play9BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play9Bitmap;
                                 break;
                             case 10:
-                                bitmap = play10Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play10BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play10BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play10BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play10Bitmap;
                                 break;
                             case 11:
-                                bitmap = play11Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play11BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play11BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play11BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play11Bitmap;
                                 break;
                             case 12:
-                                bitmap = play12Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play12BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play12BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play12BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play12Bitmap;
                                 break;
                             case 13:
-                                bitmap = play13Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play13BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play13BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play13BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play13Bitmap;
                                 break;
                             case 14:
-                                bitmap = play14Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play14BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play14BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play14BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play14Bitmap;
                                 break;
                             case 15:
-                                bitmap = play15Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play15BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play15BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play15BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play15Bitmap;
                                 break;
                             case 16:
-                                bitmap = play16Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play16BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play16BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play16BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play16Bitmap;
                                 break;
                             case 17:
-                                bitmap = play17Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play17BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play17BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play17BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play17Bitmap;
                                 break;
                             case 18:
-                                bitmap = play18Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play18BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play18BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play18BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play18Bitmap;
                                 break;
                             case 19:
-                                bitmap = play19Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play19BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play19BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play19BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play19Bitmap;
                                 break;
                             case 20:
-                                bitmap = play20Bitmap;
+                                if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1)                bitmap = play20BitmapDT;
+                                else if(bitmap1 == bitmapD1 || bitmap1 == bitmapDH1 || bitmap1 == bitmapDS1 || bitmap1 == bitmapDSH1)               bitmap = play20BitmapD;
+                                else if(bitmap1 == bitmapT1 || bitmap1 == bitmapTH1 || bitmap1 == bitmapTS1 || bitmap1 == bitmapTSH1)               bitmap = play20BitmapT;
+                                else if(bitmap1==bitmapUsual1||bitmap1== bitmapH1||bitmap1==bitmapS1||bitmap1 == bitmapSmile1||bitmap1 == bitmapSH1)bitmap = play20Bitmap;
                                 playing = false;
                                 playChecker = false;
                                 checkPlayButton = true;
@@ -1049,6 +1613,150 @@ public class DrawThread extends Thread {
                                 playButtonBitmap = playDarkButtonBitmap15;
                                 playTimer = 15;
                                 break;
+                        }
+                    }
+                    //qnel
+                    if(lastTouchX >= sleepButtonLeft && lastTouchX <= sleepButtonLeft + sleepButtonWidth && lastTouchY >= sleepButtonTop && lastTouchY <= sleepButtonTop + sleepButtonHeight && !sleepFinished && sleepChecker && !playing && !eating) {
+                        fl = true;
+                    }
+                    if(!flyingTimeIsPassed && fl && !sleepFinished) {
+                        new FlyingThread().start();
+                        flying = true;
+                        flyingTimeIsPassed = true;
+                    }
+                    if(flyingNeedToDrawNow && flying && !sleepFinished) {
+                        switch (sleep){
+                            case 1:
+                                bitmap = fly1Bitmap;
+                                break;
+                            case 2:
+                                bitmap = fly2Bitmap;
+                                birdX = (float)353/1050;
+                                birdY = (float)238/540;
+                                break;
+                            case 3:
+                                bitmap = fly1Bitmap;
+                                birdX = (float)287/1050;
+                                birdY = (float)226/540;
+                                break;
+                            case 4:
+                                bitmap = fly2Bitmap;
+                                birdX = (float)230/1050;
+                                birdY = (float)232/540;
+                                break;
+                            case 5:
+                                bitmap = fly1Bitmap;
+                                birdX = (float)159/1050;
+                                birdY = (float)193/540;
+                                break;
+                            case 6:
+                                bitmap = bitmap1;
+                                birdX = (float)48/1050;
+                                birdY = (float)218/540;
+                                break;
+                            case 7:
+                                bitmap = layBitmap;
+                                birdX = (float)60/1050;
+                                birdY = (float)207/540;
+                                laying = true;
+                                flying = false;
+                                bitmap = sleepBitmap1;
+                                sleepButtonBitmap = sleepDarkButtonBitmap60;
+                                checkSleepButton = true;
+                                sleepChecker = false;
+                                sleeping = true;
+                                sleepTimer = 60;
+                                break;
+                        }
+                    }
+                    if(laying && !sleepFinished) {
+                        if (!timeIsPassedSleep1 && !checkSleep) {
+                            new ThreadSleepBird1().start();
+                            timeIsPassedSleep1 = true;
+                        }
+                        if (needToDrawNowSleep1 && !checkSleep) {
+                            bitmap = sleepBitmap1;
+                        }
+                        if (!timeIsPassedSleep2 && checkSleep) {
+                            new ThreadSleepBird2().start();
+                            timeIsPassedSleep2 = true;
+                        }
+                        if (needToDrawNowSleep2 && checkSleep) {
+                            bitmap = sleepBitmap2;
+                        }
+                        if(!timeIsPassedSle){
+                            new Sleep().start();
+                            timeIsPassedSle = true;
+                        }
+                        if(needToDrawNowSle && r1 == 1){
+                            qun *= (sleepRight2 - sleepLeft);
+                            if (sleepRight + qun > sleepRight2) {
+                                sleepRight = sleepRight2;
+                                sleepFinished = true;
+                                sleeping = false;
+                                laying = false;
+                            } else {
+                                sleepRight += qun;
+                            }
+                            qun /= (sleepRight2 - sleepLeft);
+                            r1 = 0;
+                        }
+                    }
+                    if(sleepFinished) {
+                        if(!flyingBackTimeIsPassed){
+                            new FlyingBackThread().start();
+                            flyingBackTimeIsPassed = true;
+                            flyingBack = true;
+                        }
+                        if(flyingBackNeedToDrawNow && flyingBack){
+                            switch (flyBack){
+                                case 1:
+                                    bitmap = bitmap1;
+                                    birdX = (float)48/1050;
+                                    birdY = (float)218/540;
+                                    break;
+                                case 2:
+                                    bitmap = fly3Bitmap;
+                                    birdX = (float)159/1050;
+                                    birdY = (float)193/540;
+                                    break;
+                                case 3:
+                                    bitmap = fly4Bitmap;
+                                    birdX = (float)230/1050;
+                                    birdY = (float)232/540;
+                                    break;
+                                case 4:
+                                    bitmap = fly3Bitmap;
+                                    birdX = (float)287/1050;
+                                    birdY = (float)226/540;
+                                    break;
+                                case 5:
+                                    bitmap = fly4Bitmap;
+                                    birdX = (float)353/1050;
+                                    birdY = (float)238/540;
+                                    break;
+                                case 6:
+                                    bitmap = fly3Bitmap;
+                                    birdX = (float) 419/1050;
+                                    birdY = (float) 232/540;
+                                    break;
+                                case 7:
+                                    bitmap = bitmap1;
+                                    birdX = (float) 419/1050;
+                                    birdY = (float) 232/540;
+                                    flyingBack = false;
+                                    flyBack = 0;
+                                    sleeping = false;
+                                    sleepFinished = false;
+                                    sleep = 0;
+                                    lastTouchY = 0;
+                                    lastTouchX = 0;
+                                    sl = false;
+                                    fl = false;
+                                    flying = false;
+                                    flyingTimeIsPassed = false;
+                                    break;
+                            }
                         }
                     }
                 } finally {
@@ -1135,6 +1843,45 @@ public class DrawThread extends Thread {
             }
         }
     }
+    class ThreadSleepBird1 extends Thread{
+        @Override
+        public void run() {
+            try {
+                sleep(1500);
+                timeIsPassedSleep1 = false;
+                needToDrawNowSleep1 = true;
+                checkSleep = true;
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    class ThreadSleepBird2 extends Thread{
+        @Override
+        public void run() {
+            try {
+                sleep(1000);
+                timeIsPassedSleep2 = false;
+                needToDrawNowSleep2 = true;
+                checkSleep = false;
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    class Sleep extends Thread{
+        @Override
+        public void run() {
+            try {
+                sleep(600);
+                timeIsPassedSle = false;
+                needToDrawNowSle = true;
+                r1 = 1;
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     class EatingThread extends Thread{
         @Override
         public void run() {
@@ -1165,6 +1912,36 @@ public class DrawThread extends Thread {
             }
         }
     }
+    class FlyingThread extends Thread{
+        @Override
+        public void run() {
+            try {
+                if(sleep<7) {
+                    sleep++;
+                    sleep(300);
+                    flyingTimeIsPassed = false;
+                    flyingNeedToDrawNow = true;
+                }
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    class FlyingBackThread extends Thread{
+        @Override
+        public void run() {
+            try {
+                if(flyBack<7) {
+                    flyBack++;
+                    sleep(300);
+                    flyingBackTimeIsPassed = false;
+                    flyingBackNeedToDrawNow = true;
+                }
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     class EatDarkButtonThread extends Thread{
         @Override
         public void run() {
@@ -1189,6 +1966,21 @@ public class DrawThread extends Thread {
                     checkPlayButton = true;
                     drawPlayButton = true;
                     playTimer--;
+                }
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    class SleepDarkButtonThread extends Thread{
+        @Override
+        public void run() {
+            try {
+                if(sleepTimer>=0) {
+                    sleep(1000);
+                    checkSleepButton = true;
+                    drawSleepButton = true;
+                    sleepTimer--;
                 }
             }catch (InterruptedException e) {
                 e.printStackTrace();
