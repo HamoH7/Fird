@@ -24,8 +24,8 @@ public class IntroActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-            //    Intent i = new Intent(IntroActivity.this, MainActivity.class);
-            //    startActivity(i);
+                Intent i = new Intent(IntroActivity.this, MainActivity.class);
+                startActivity(i);
             }
         }
         Timer t = new Timer();

@@ -2,6 +2,7 @@ package com.example.test;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -26,10 +27,9 @@ public class MyDraw extends SurfaceView implements SurfaceHolder.Callback{
         getHolder().addCallback(this);
     }
     private DrawThread drawThread;
-
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
-       drawThread = new DrawThread(getContext(), getHolder());
+       drawThread = new DrawThread(getContext(), getHolder(), this);
        drawThread.start();
     }
     @SuppressLint("ClickableViewAccessibility")

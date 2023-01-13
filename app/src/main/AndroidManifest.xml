@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.test">
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -25,8 +25,14 @@
             </intent-filter>
         </activity>
         <activity
-        android:name=".IntroActivity"
-        android:label="IntroActivity" >
+            android:name=".IntroActivity"
+            android:label="IntroActivity"
+        android:screenOrientation="landscape">
+        </activity>
+        <activity
+            android:name=".Screenshot"
+            android:label="Screenshot"
+            android:screenOrientation="landscape">
         </activity>
     </application>
 
