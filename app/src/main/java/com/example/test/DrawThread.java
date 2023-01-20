@@ -1,8 +1,10 @@
 package com.example.test;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -17,6 +19,9 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ActivityChooserView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.io.File;
@@ -25,7 +30,7 @@ import java.util.Date;
 
 public class DrawThread extends Thread {
     private  SurfaceHolder surfaceHolder;
-
+    private static  final int REQUEST_CODE = 1;
     public MainActivity mainActivity = new MainActivity();
     public MyDraw myDraw;
     public Screenshot screenshot = new Screenshot();
@@ -825,13 +830,26 @@ public class DrawThread extends Thread {
         }
     }
     public void screen(File file){
-        Uri uri = Uri.fromFile(file);
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
-        sendIntent.setType("image/jpg");
-        context.startActivity(Intent.createChooser(sendIntent," "));
+        if(ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+            saveImage();
+        }
+        else {
+            ActivityCompat.requestPermissions((Activity)context,new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            },REQUEST_CODE);
+        }
+        // Uri uri = Uri.fromFile(file);
+        // Intent sendIntent = new Intent();
+        // sendIntent.setAction(Intent.ACTION_SEND);
+        // sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        // sendIntent.setType("image/jpg");
+        // context.startActivity(Intent.createChooser(sendIntent," "));
     }
+
+    private void saveImage() {
+
+    }
+
     public void setTouch(int x, int y){
         lastTouchX = x;
         lastTouchY = y;
