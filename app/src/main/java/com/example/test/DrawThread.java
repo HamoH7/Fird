@@ -1,40 +1,37 @@
 package com.example.test;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.media.Image;
-import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.View;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.ActivityChooserView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.Date;
 
 public class DrawThread extends Thread {
     private  SurfaceHolder surfaceHolder;
     private static  final int REQUEST_CODE = 1;
+    private String IMAGE_NAME = "testImage.jpg";
     public MainActivity mainActivity = new MainActivity();
     public MyDraw myDraw;
     public Screenshot screenshot = new Screenshot();
+    private SharedPreferences.Editor editor;
     private Context context;
+    private Bitmap bitmapScreen;
+    private int foin = 0;
     private float lastTouchX = 0;
     private float lastTouchY = 0;
     private float birdX = (float) 419/1050;
@@ -45,7 +42,7 @@ public class DrawThread extends Thread {
     private float screenshotHeight = (float) 73/540;
     private float screenshotX = (float) 962/1050;
     private float screenshotY = (float) 461/540;
-    private int disgust = 1, eatScore = 0, wash = 1, hit = 1,poop1=1,poop2=1,poop3=0, m = 0, n = 0, m1 = 0, m2 = 0, m3 = 0, m4 = 0,m6 = 0, eat = 1, e = 0, eatTimer = 10, m5 = 0, p = 0, playTimer = 15, sleepTimer = 60, play = 0, sleep = 0, r1 = 0, flyBack = 0;
+    private int disgust = 1, eatScore = 0, wash = 1,foinTime = 0, hit = 1,poop1=1,poop2=1,poop3=0, m = 0, n = 0, m1 = 0, m2 = 0, m3 = 0, m4 = 0,m6 = 0, eat = 1, e = 0, eatTimer = 10, m5 = 0, p = 0, playTimer = 15, sleepTimer = 60, play = 0, sleep = 0, r1 = 0, flyBack = 0;
     private double h = (float)1/100;
     private double s = (float) 1 / 100;
     private double q = (float) 1 / 100;
@@ -64,6 +61,7 @@ public class DrawThread extends Thread {
     private boolean hitting = false;
     private boolean eating = false;
     private boolean playing = false;
+    private boolean gettingFoin = false;
     private boolean flying = false;
     private boolean laying = false;
     private boolean sleeping = false;
@@ -114,6 +112,8 @@ public class DrawThread extends Thread {
     private boolean needToDrawNowSleep1 = false;
     private boolean timeIsPassedSleep2 = false;
     private boolean needToDrawNowSleep2 = false;
+    private boolean getFoinTimeIsPassed = false;
+    private boolean getFoinNeedToDrawNow = false;
     private boolean timeIsPassedSle= false;
     private boolean needToDrawNowSle = false;
     private boolean sleepFinished = false;
@@ -140,21 +140,29 @@ public class DrawThread extends Thread {
     private Bitmap playBitmap[] = new Bitmap[21],playBitmapD[] = new Bitmap[21],playBitmapT[] = new Bitmap[21],playBitmapDT[] = new Bitmap[21];
     private Bitmap flyBitmapUsual[] = new Bitmap[5], flyBitmapDH[] = new Bitmap[5],flyBitmapDS[] = new Bitmap[5],flyBitmapD[] = new Bitmap[5], flyBitmapH[] = new Bitmap[5],flyBitmapSmile[] = new Bitmap[5], flyBitmapSDH[] = new Bitmap[5], flyBitmapSH[] = new Bitmap[5], flyBitmapS[] = new Bitmap[5], flyBitmapTDH[] = new Bitmap[5], flyBitmapTDSH[] = new Bitmap[5], flyBitmapTDS[] = new Bitmap[5], flyBitmapTD[] = new Bitmap[5], flyBitmapTH[] = new Bitmap[5], flyBitmapTSH[] = new Bitmap[5], flyBitmapTS[] = new Bitmap[5], flyBitmapT[] = new Bitmap[5];
     private Bitmap washBitmap[] = new Bitmap[26];
+    private Bitmap getFoinBitmap[] = new Bitmap[8];
+    private Bitmap foinBitmap;
     private Bitmap poopingBitmapUsual[] = new Bitmap[11],poopingBitmapDSH[] = new Bitmap[11],poopingBitmapDH[] = new Bitmap[11],poopingBitmapDS[] = new Bitmap[11],poopingBitmapDTH[] = new Bitmap[11],poopingBitmapDTSH[] = new Bitmap[11],poopingBitmapDTS[] = new Bitmap[11],poopingBitmapDT[] = new Bitmap[11],poopingBitmapD[] = new Bitmap[11],poopingBitmapHS[] = new Bitmap[11],poopingBitmapH[] = new Bitmap[11],poopingBitmapTH[] = new Bitmap[11],poopingBitmapS[] = new Bitmap[11],poopingBitmapTHS[] = new Bitmap[11],poopingBitmapTS[] = new Bitmap[11],poopingBitmapT[] = new Bitmap[11];
     private Bitmap sleepUsual1, sleepUsual2, sleepDH1, sleepDH2, sleepDSH1, sleepDSH2, sleepDS1, sleepDS2, sleepD1, sleepD2, sleepH1, sleepH2, sleepSmile1, sleepSmile2, sleepSH1, sleepSH2, sleepS1, sleepS2;
     private volatile boolean running = true;
     private Class<Activity> activityClass;
-    Paint paint = new Paint();
-    Paint paintLife = new Paint();
-    Paint paintDirt = new Paint();
-    Paint paintHungry = new Paint();
-    Paint paintSleep = new Paint();
-    Paint paintHappy = new Paint();
-    Paint paintBlack = new Paint();
+    private Paint paint = new Paint();
+    private Paint paintLife = new Paint();
+    private Paint paintDirt = new Paint();
+    private Paint paintHungry = new Paint();
+    private Paint paintSleep = new Paint();
+    private Paint paintHappy = new Paint();
+    private Paint paintBlack = new Paint();
+    private Paint paintFoin = new Paint();
+    private SharedPreferences foinShared;
     public DrawThread(Context context, SurfaceHolder surfaceHolder, MyDraw myDraw) {
         this.view = view;
         this.activityClass = activityClass;
         this.surfaceHolder = surfaceHolder;
+        this.context = context;
+        foinShared = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
+        editor = foinShared.edit();
+        foin = foinShared.getInt("FOIN", 0);
         bitmapUsual1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.sovorakan1);
         bitmapUsual2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.sovorakan2);
         bitmapDTSH1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_t_s_h_1);
@@ -780,6 +788,15 @@ public class DrawThread extends Thread {
         poopingBitmapT[8] = BitmapFactory.decodeResource(context.getResources(), R.drawable.p_t8);
         poopingBitmapT[9] = BitmapFactory.decodeResource(context.getResources(), R.drawable.p_t9);
         poopingBitmapT[10] =BitmapFactory.decodeResource(context.getResources(), R.drawable.p_t10);
+        getFoinBitmap[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.foin_sandxak);
+        foinBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.foin_sandxak);
+        getFoinBitmap[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.foin1);
+        getFoinBitmap[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.foin2);
+        getFoinBitmap[3] = BitmapFactory.decodeResource(context.getResources(), R.drawable.foin3);
+        getFoinBitmap[4] = BitmapFactory.decodeResource(context.getResources(), R.drawable.foin4);
+        getFoinBitmap[5] = BitmapFactory.decodeResource(context.getResources(), R.drawable.foin5);
+        getFoinBitmap[6] = BitmapFactory.decodeResource(context.getResources(), R.drawable.foin6);
+        getFoinBitmap[7] = BitmapFactory.decodeResource(context.getResources(), R.drawable.foin7);
         washButtonBitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.lvacvelu_knopka);
         washButtonBitmap2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.lvacvelu_knopka);
         washButtonBitmapA = BitmapFactory.decodeResource(context.getResources(),R.drawable.lvacvelu_knopkaa);
@@ -809,47 +826,48 @@ public class DrawThread extends Thread {
         tired = ResourcesCompat.getColor(context.getResources(),R.color.sleep,null);
         happy = ResourcesCompat.getColor(context.getResources(),R.color.happy,null);
     }
-    public void takeScreenshot() {
-        Date now = new Date();
-        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+    public int getFoin(){
+        return foin;
+    }
+    private void takeScreenshot() {
         try {
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+            // image naming and path  to include sd card  appending name you choose for file
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/DCIM/" +IMAGE_NAME;
+            Log.i("path",mPath);
+            // create bitmap screen capture
             View v1 = ((Activity)context).getWindow().getDecorView().getRootView();
             v1.setDrawingCacheEnabled(true);
-            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            bitmapScreen = Bitmap.createBitmap(v1.getDrawingCache());
             v1.setDrawingCacheEnabled(false);
             File imageFile = new File(mPath);
             FileOutputStream outputStream = new FileOutputStream(imageFile);
             int quality = 100;
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            bitmapScreen.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
             outputStream.flush();
             outputStream.close();
-            screen(imageFile);
+            m6 = 1;
         } catch (Throwable e) {
+            // Several error may come out with file handling or DOM
             e.printStackTrace();
         }
     }
-    public void screen(File file){
-        if(ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-            saveImage();
+    private void sendScreen(){
+        String mPath = Environment.getExternalStorageDirectory().toString() + "/DCIM/";
+        try {
+            File f=new File(mPath, IMAGE_NAME);
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_STREAM, b);
+            sendIntent.setType("image/jpeg");
+            context.startActivity(Intent.createChooser(sendIntent," "));
+            m6 = 0;
         }
-        else {
-            ActivityCompat.requestPermissions((Activity)context,new String[]{
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-            },REQUEST_CODE);
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
         }
-        // Uri uri = Uri.fromFile(file);
-        // Intent sendIntent = new Intent();
-        // sendIntent.setAction(Intent.ACTION_SEND);
-        // sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
-        // sendIntent.setType("image/jpg");
-        // context.startActivity(Intent.createChooser(sendIntent," "));
     }
-
-    private void saveImage() {
-
-    }
-
     public void setTouch(int x, int y){
         lastTouchX = x;
         lastTouchY = y;
@@ -875,10 +893,15 @@ public class DrawThread extends Thread {
                     bitmapDarkkust = Bitmap.createScaledBitmap(bitmapDarkkust, canvas.getWidth() * 245 / 1050, canvas.getHeight() * 180 / 540, true);
                     paint.setSubpixelText(true);
                     paint.setAntiAlias(true);
+                    paintFoin.setSubpixelText(true);
+                    paintFoin.setAntiAlias(true);
                     paintLife.setSubpixelText(true);
                     paintLife.setAntiAlias(true);
                     paintBlack.setSubpixelText(true);
                     paintBlack.setAntiAlias(true);
+                    paintFoin.setColor(Color.BLACK);
+
+
                     //hetevi fon
                     if (!flying && !sleeping && !laying) {
                         canvas.drawBitmap(bitmapbg, 0, 0, paint);
@@ -1272,6 +1295,30 @@ public class DrawThread extends Thread {
                             bitmap = bitmap2;
                         }
                     }
+                    //foin
+                    paintFoin.setTextSize((float) canvas.getWidth() * 20/1050);
+                    for (int i = 0; i < 8; i++) {
+                        getFoinBitmap[i] = Bitmap.createScaledBitmap(getFoinBitmap[i], canvas.getWidth(), canvas.getHeight(), true);
+                    }
+                    if(!getFoinTimeIsPassed && gettingFoin) {
+                        new GetFoinThread().start();
+                        getFoinTimeIsPassed = true;
+                    }
+                    if(getFoinNeedToDrawNow && gettingFoin){
+                        foinBitmap = getFoinBitmap[foinTime];
+                        if(foinTime == 7) {
+                            foinBitmap = getFoinBitmap[0];
+                            foinTime = 0;
+                            gettingFoin = false;
+                            foin++;
+                            editor.putInt("FOIN",foin);
+                            editor.apply();
+                        }
+                    }
+                    foinBitmap = Bitmap.createScaledBitmap(foinBitmap, canvas.getWidth(), canvas.getHeight(), true);
+                    canvas.drawBitmap(foinBitmap, 0, 0, paint);
+                    if(foin>=0 && foin <= 9) canvas.drawText(foin + " ", (float) canvas.getWidth() * 101 / 1050, (float) canvas.getHeight() * 49 / 540, paintFoin);
+                    if(foin>=10 && foin <= 99) canvas.drawText(foin + " ", (float) canvas.getWidth() * 95 / 1050, (float) canvas.getHeight() * 49 / 540, paintFoin);
                     // utelu knopken
                     float eatButtonLeft = (float) canvas.getWidth()*19/1050;
                     float eatButtonTop = (float) canvas.getHeight()*427/540;
@@ -1407,7 +1454,7 @@ public class DrawThread extends Thread {
                         new Minute().start();
                         m5 = 1;
                     }
-                    if (eatScore >= 1 && pop && !pooping && !eating && !playing && !flying && !sleeping && !laying && !hitting && !washing) {
+                    if (eatScore >= 4 && pop && !pooping && !eating && !playing && !flying && !sleeping && !laying && !hitting && !washing) {
                         eatButtonBitmap2 = eatButtonBitmap;
                         sleepButtonBitmap2 = sleepButtonBitmap;
                         playButtonBitmap2 = playButtonBitmap;
@@ -1473,7 +1520,7 @@ public class DrawThread extends Thread {
                         if (disgust >= 11) {
                             disgust = 1;
                         }
-                        if(bitmap1 == bitmapUsual1 || bitmap1 == bitmapSmile1) bitmap = poopingBitmapDTSH[disgust];else if(bitmap1 == bitmapDSH1) bitmap = poopingBitmapDSH[disgust];else if(bitmap1 == bitmapDTS1) bitmap = poopingBitmapDTS[disgust];else if(bitmap1 == bitmapDTH1) bitmap = poopingBitmapDTH[disgust];else if(bitmap1 == bitmapDH1) bitmap = poopingBitmapDH[disgust];else if(bitmap1 == bitmapDT1) bitmap = poopingBitmapDT[disgust];else if(bitmap1 == bitmapDS1) bitmap = poopingBitmapDS[disgust];else if(bitmap1 == bitmapD1) bitmap = poopingBitmapD[disgust];else if(bitmap1 == bitmapTSH1) bitmap = poopingBitmapTHS[disgust];else if(bitmap1 == bitmapSH1) bitmap = poopingBitmapHS[disgust];else if(bitmap1 == bitmapTH1) bitmap = poopingBitmapTH[disgust];else if(bitmap1 == bitmapH1) bitmap = poopingBitmapH[disgust];else if(bitmap1 == bitmapTS1) bitmap = poopingBitmapTS[disgust];else if(bitmap1 == bitmapT1) bitmap = poopingBitmapT[disgust];else if(bitmap1 == bitmapS1) bitmap = poopingBitmapS[disgust];
+                        if(bitmap1 == bitmapUsual1 || bitmap1 == bitmapSmile1) bitmap = poopingBitmapUsual[disgust];else if(bitmap1 == bitmapDSH1) bitmap = poopingBitmapDSH[disgust];else if(bitmap1 == bitmapDTS1) bitmap = poopingBitmapDTS[disgust];else if(bitmap1 == bitmapDTH1) bitmap = poopingBitmapDTH[disgust];else if(bitmap1 == bitmapDH1) bitmap = poopingBitmapDH[disgust];else if(bitmap1 == bitmapDT1) bitmap = poopingBitmapDT[disgust];else if(bitmap1 == bitmapDS1) bitmap = poopingBitmapDS[disgust];else if(bitmap1 == bitmapD1) bitmap = poopingBitmapD[disgust];else if(bitmap1 == bitmapTSH1) bitmap = poopingBitmapTHS[disgust];else if(bitmap1 == bitmapSH1) bitmap = poopingBitmapHS[disgust];else if(bitmap1 == bitmapTH1) bitmap = poopingBitmapTH[disgust];else if(bitmap1 == bitmapH1) bitmap = poopingBitmapH[disgust];else if(bitmap1 == bitmapTS1) bitmap = poopingBitmapTS[disgust];else if(bitmap1 == bitmapT1) bitmap = poopingBitmapT[disgust];else if(bitmap1 == bitmapS1) bitmap = poopingBitmapS[disgust];
                     }
                     if (disgusting && lastTouchX >= poopX && lastTouchX <= poopX + poopWidth && lastTouchY >= poopY && lastTouchY <= poopY + poopHeight) {
                         new PoopFlyBackThread().start();
@@ -1541,8 +1588,9 @@ public class DrawThread extends Thread {
                         }
                     }
                     // utel
-                    if(lastTouchX >= eatButtonLeft && lastTouchX <= eatButtonLeft + ButtonWidth && lastTouchY >= eatButtonTop && lastTouchY <= eatButtonTop + ButtonHeight && eatChecker && !playing && !sleeping && !laying && !flying && !flyingBack && !hitting && !washing && !pooping && !flyPoop && !disgusting && !flyBackPoop) {
+                    if(lastTouchX >= eatButtonLeft && lastTouchX <= eatButtonLeft + ButtonWidth && lastTouchY >= eatButtonTop && lastTouchY <= eatButtonTop + ButtonHeight && eatChecker && !playing && !sleeping && !laying && !flying && !flyingBack && !hitting && !washing && !pooping && !flyPoop && !disgusting && !flyBackPoop && !ea) {
                         ea = true;
+                        gettingFoin = true;
                     }
                     if(!eatingTimeIsPassed && ea) {
                         new EatingThread().start();
@@ -1588,8 +1636,9 @@ public class DrawThread extends Thread {
                         }
                     }
                     //xndal
-                    if(lastTouchX >= playButtonLeft && lastTouchX <= playButtonLeft + ButtonWidth && lastTouchY >= playButtonTop && lastTouchY <= playButtonTop + ButtonHeight && playChecker && !eating && !sleeping && !laying && !flying && !flyingBack && !hitting && !washing && !pooping && !flyPoop && !disgusting && !flyBackPoop) {
+                    if(lastTouchX >= playButtonLeft && lastTouchX <= playButtonLeft + ButtonWidth && lastTouchY >= playButtonTop && lastTouchY <= playButtonTop + ButtonHeight && playChecker && !eating && !sleeping && !laying && !flying && !flyingBack && !hitting && !washing && !pooping && !flyPoop && !disgusting && !flyBackPoop && !pl) {
                         pl = true;
+                        gettingFoin = true;
                     }
                     if(!playingTimeIsPassed && pl) {
                         new PlayingThread().start();
@@ -1622,8 +1671,9 @@ public class DrawThread extends Thread {
                         }
                     }
                     //qnel
-                    if(lastTouchX >= sleepButtonLeft && lastTouchX <= sleepButtonLeft + ButtonWidth && lastTouchY >= sleepButtonTop && lastTouchY <= sleepButtonTop + ButtonHeight && !sleepFinished && sleepChecker && !playing && !eating && !hitting && !washing && !pooping && !flyPoop && !disgusting && !flyBackPoop) {
+                    if(lastTouchX >= sleepButtonLeft && lastTouchX <= sleepButtonLeft + ButtonWidth && lastTouchY >= sleepButtonTop && lastTouchY <= sleepButtonTop + ButtonHeight && !sleepFinished && sleepChecker && !playing && !eating && !hitting && !washing && !pooping && !flyPoop && !disgusting && !flyBackPoop && !fl) {
                         fl = true;
+                        gettingFoin = true;
                     }
                     if(!flyingTimeIsPassed && fl && !sleepFinished) {
                         new FlyingThread().start();
@@ -1785,8 +1835,9 @@ public class DrawThread extends Thread {
                         }
                     }
                     // loxanal
-                    if(lastTouchX >= dirtButtonLeft && lastTouchX <= dirtButtonLeft + ButtonWidth && lastTouchY >= dirtButtonTop && lastTouchY <= dirtButtonTop + ButtonHeight && (dirtRight - dirtLeft <= dirtWeight / 2.) && !playing && !eating && !sleeping && !laying && !flying && !flyingBack && !hitting && !pooping && !flyPoop && !disgusting && !flyBackPoop) {
+                    if(lastTouchX >= dirtButtonLeft && lastTouchX <= dirtButtonLeft + ButtonWidth && lastTouchY >= dirtButtonTop && lastTouchY <= dirtButtonTop + ButtonHeight && (dirtRight - dirtLeft <= dirtWeight / 2.) && !playing && !eating && !sleeping && !laying && !flying && !flyingBack && !hitting && !pooping && !flyPoop && !disgusting && !flyBackPoop && !wa) {
                         wa = true;
+                        gettingFoin = true;
                     }
                     if(!washingTimeIsPassed && wa) {
                         new WashingThread().start();
@@ -1824,8 +1875,11 @@ public class DrawThread extends Thread {
                     for (int i = 1; i < 15; i++) {
                         hitBitmapDH[i] = Bitmap.createScaledBitmap(hitBitmapDH[i],(int)(canvas.getWidth() * birdWidth),(int)(canvas.getHeight()*birdHeight),true);
                     }
-                    if(lastTouchX >= (birdX * canvas.getWidth()) && lastTouchX <= (birdX + birdWidth)*(canvas.getWidth()) && lastTouchY >= (birdY*canvas.getHeight()) && lastTouchY <= (birdY + birdHeight)*(canvas.getHeight()) && !eating && !playing && !flying && !sleeping && !laying && !flyingBack && !washing && !pooping && !flyPoop && !disgusting && !flyBackPoop) {
+                    if(lastTouchX >= (birdX * canvas.getWidth()) && lastTouchX <= (birdX + birdWidth)*(canvas.getWidth()) && lastTouchY >= (birdY*canvas.getHeight()) && lastTouchY <= (birdY + birdHeight)*(canvas.getHeight()) && !eating && !playing && !flying && !sleeping && !laying && !flyingBack && !washing && !pooping && !flyPoop && !disgusting && !flyBackPoop && !hi) {
                         hi = true;
+                        gettingFoin = true;
+                    }if(m6 == 1 && lastTouchX >= (birdX * canvas.getWidth()) && lastTouchX <= (birdX + birdWidth)*(canvas.getWidth()) && lastTouchY >= (birdY*canvas.getHeight()) && lastTouchY <= (birdY + birdHeight)*(canvas.getHeight()) && !eating && !playing && !flying && !sleeping && !laying && !flyingBack && !washing && !pooping && !flyPoop && !disgusting && !flyBackPoop) {
+                        sendScreen();
                     }
                     if(!hitTimeIsPassed && hi) {
                         new HitThread().start();
@@ -1846,8 +1900,13 @@ public class DrawThread extends Thread {
                         }
                     }
                     // screenshot
-                    if(lastTouchX >= (screenshotX * canvas.getWidth()) && lastTouchX <= (screenshotX + screenshotWidth)*(canvas.getWidth()) && lastTouchY >= (screenshotY*canvas.getHeight()) && lastTouchY <= (screenshotY + screenshotHeight)*(canvas.getHeight())) {
+                    if(lastTouchX >= (screenshotX * canvas.getWidth()) && lastTouchX <= (screenshotX + screenshotWidth)*(canvas.getWidth()) && lastTouchY >= (screenshotY*canvas.getHeight()) && lastTouchY <= (screenshotY + screenshotHeight)*(canvas.getHeight()) && m6 == 0) {
                         takeScreenshot();
+                        lastTouchY = 0;
+                        lastTouchX = 0;
+                    }
+                    if(lastTouchX >= (screenshotX * canvas.getWidth()) && lastTouchX <= (screenshotX + screenshotWidth)*(canvas.getWidth()) && lastTouchY >= (screenshotY*canvas.getHeight()) && lastTouchY <= (screenshotY + screenshotHeight)*(canvas.getHeight()) && m6 == 1) {
+                        sendScreen();
                         lastTouchY = 0;
                         lastTouchX = 0;
                     }
@@ -2179,6 +2238,21 @@ public class DrawThread extends Thread {
                     disgust++;
                     disgustingTimeIsPassed = false;
                     disgustingNeedToDrawNow = true;
+                }
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    class GetFoinThread extends Thread{
+        @Override
+        public void run() {
+            try {
+                if(foinTime<7) {
+                    sleep(100);
+                    foinTime++;
+                    getFoinTimeIsPassed = false;
+                    getFoinNeedToDrawNow = true;
                 }
             }catch (InterruptedException e) {
                 e.printStackTrace();

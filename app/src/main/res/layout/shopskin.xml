@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:backgroundTint="@color/black">
 
     <LinearLayout
-        android:layout_width="729dp"
-        android:layout_height="409dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,16 +25,20 @@
                 android:id="@+id/button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="10"
-                android:text="<"
-                android:textSize="100px" />
+                android:layout_weight="7"
+                android:background="@drawable/shopskin"
+                android:text="&lt;"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="50sp" />
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Shop"
+                android:background="@drawable/back_button"
+                android:text="@string/shop"
                 android:textColor="#3E2A2A"
                 android:textSize="100px" />
 
@@ -43,7 +48,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal">
+
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,13 +62,15 @@
                     android:id="@+id/button2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Skins" />
+                    android:text="Skins"
+                    android:background="@drawable/back_button"/>
 
                 <Button
                     android:id="@+id/button3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Buster" />
+                    android:text="Buster"
+                    android:background="@drawable/back_button"/>
             </LinearLayout>
 
             <HorizontalScrollView
@@ -72,7 +81,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal" >
+                    android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/button4"
@@ -80,6 +89,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Button" />
+
                 </LinearLayout>
             </HorizontalScrollView>
         </LinearLayout>

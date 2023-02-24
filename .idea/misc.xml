@@ -5,9 +5,11 @@
       <map>
         <entry key="..\:/Test2-master/app/src/main/res/drawable-nopts/ic_launcher_foreground.xml" value="0.115" />
         <entry key="..\:/Test2-master/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1245" />
+        <entry key="..\:/Test2-master/app/src/main/res/drawable/back_button.xml" value="0.3665" />
+        <entry key="..\:/Test2-master/app/src/main/res/drawable/shopskin.xml" value="0.358" />
         <entry key="..\:/Test2-master/app/src/main/res/layout/activity_main.xml" value="0.16041666666666668" />
         <entry key="..\:/Test2-master/app/src/main/res/layout/shop.xml" value="0.2740036231884058" />
-        <entry key="..\:/Test2-master/app/src/main/res/layout/shopskin.xml" value="0.27355072463768115" />
+        <entry key="..\:/Test2-master/app/src/main/res/layout/shopskin.xml" value="0.23473282442748092" />
         <entry key="..\:/Users/Hamo/AndroidStudioProjects/Test/app/src/main/res/drawable/animation_list.xml" value="0.2755" />
         <entry key="..\:/Users/Hamo/AndroidStudioProjects/Test/app/src/main/res/drawable/color.xml" value="0.111" />
         <entry key="..\:/Users/Hamo/AndroidStudioProjects/Test/app/src/main/res/drawable/ic_launcher_background.xml" value="0.111" />

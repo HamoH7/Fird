@@ -32,6 +32,7 @@ public class MyDraw extends SurfaceView implements SurfaceHolder.Callback{
        drawThread = new DrawThread(getContext(), getHolder(), this);
        drawThread.start();
     }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {

@@ -34,6 +34,11 @@
             android:label="Screenshot"
             android:screenOrientation="landscape">
         </activity>
+        <activity
+        android:name=".ShopSkin"
+        android:label="ShopSkin"
+        android:screenOrientation="landscape">
+    </activity>
     </application>
 
 </manifest>
