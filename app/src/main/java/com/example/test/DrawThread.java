@@ -144,6 +144,7 @@ public class DrawThread extends Thread {
     private Bitmap foinBitmap;
     private Bitmap poopingBitmapUsual[] = new Bitmap[11],poopingBitmapDSH[] = new Bitmap[11],poopingBitmapDH[] = new Bitmap[11],poopingBitmapDS[] = new Bitmap[11],poopingBitmapDTH[] = new Bitmap[11],poopingBitmapDTSH[] = new Bitmap[11],poopingBitmapDTS[] = new Bitmap[11],poopingBitmapDT[] = new Bitmap[11],poopingBitmapD[] = new Bitmap[11],poopingBitmapHS[] = new Bitmap[11],poopingBitmapH[] = new Bitmap[11],poopingBitmapTH[] = new Bitmap[11],poopingBitmapS[] = new Bitmap[11],poopingBitmapTHS[] = new Bitmap[11],poopingBitmapTS[] = new Bitmap[11],poopingBitmapT[] = new Bitmap[11];
     private Bitmap sleepUsual1, sleepUsual2, sleepDH1, sleepDH2, sleepDSH1, sleepDSH2, sleepDS1, sleepDS2, sleepD1, sleepD2, sleepH1, sleepH2, sleepSmile1, sleepSmile2, sleepSH1, sleepSH2, sleepS1, sleepS2;
+    private Bitmap shopButton;
     private volatile boolean running = true;
     private Class<Activity> activityClass;
     private Paint paint = new Paint();
@@ -819,6 +820,7 @@ public class DrawThread extends Thread {
         highScoreBitmap =  BitmapFactory.decodeResource(context.getResources(),R.drawable.highscore);
         scoreBitmap =  BitmapFactory.decodeResource(context.getResources(),R.drawable.score);
         screenshotBitmap =  BitmapFactory.decodeResource(context.getResources(),R.drawable.screenshot);
+        shopButton =  BitmapFactory.decodeResource(context.getResources(),R.drawable.xanut);
         bitmap = bitmapSmile1;
         life = ResourcesCompat.getColor(context.getResources(),R.color.life,null);
         dirt = ResourcesCompat.getColor(context.getResources(),R.color.dirt,null);
@@ -1319,6 +1321,13 @@ public class DrawThread extends Thread {
                     canvas.drawBitmap(foinBitmap, 0, 0, paint);
                     if(foin>=0 && foin <= 9) canvas.drawText(foin + " ", (float) canvas.getWidth() * 101 / 1050, (float) canvas.getHeight() * 49 / 540, paintFoin);
                     if(foin>=10 && foin <= 99) canvas.drawText(foin + " ", (float) canvas.getWidth() * 95 / 1050, (float) canvas.getHeight() * 49 / 540, paintFoin);
+                    // Xanuti knopka
+                    float shopButtonLeft = (float) canvas.getWidth()*878/1050;
+                    float shopButtonTop = (float) canvas.getHeight()*462/540;
+                    int shopButtonWidth = canvas.getWidth()*75/1050;
+                    int shopButtonHeight = canvas.getHeight()*75/540;
+                    shopButton = Bitmap.createScaledBitmap(shopButton,shopButtonWidth, shopButtonHeight,true);
+                    canvas.drawBitmap(shopButton, shopButtonLeft, shopButtonTop, paint);
                     // utelu knopken
                     float eatButtonLeft = (float) canvas.getWidth()*19/1050;
                     float eatButtonTop = (float) canvas.getHeight()*427/540;
