@@ -28,7 +28,6 @@ public class DrawThread extends Thread {
     public MainActivity mainActivity = new MainActivity();
     public MyDraw myDraw;
     public Screenshot screenshot = new Screenshot();
-    private SharedPreferences.Editor editor;
     private Context context;
     private Bitmap bitmapScreen;
     private int foin = 0;
@@ -155,15 +154,34 @@ public class DrawThread extends Thread {
     private Paint paintHappy = new Paint();
     private Paint paintBlack = new Paint();
     private Paint paintFoin = new Paint();
-    private SharedPreferences foinShared;
-    public DrawThread(Context context, SurfaceHolder surfaceHolder, MyDraw myDraw) {
+    private SharedPreferences foinSP;
+    private SharedPreferences dirtSP;
+    private SharedPreferences hungrySP;
+    private SharedPreferences sleepSP;
+    private SharedPreferences happySP;
+    private SharedPreferences.Editor foinEditor;
+    private SharedPreferences.Editor dirtEditor;
+    private SharedPreferences.Editor hungryEditor;
+    private SharedPreferences.Editor sleepEditor;
+    private SharedPreferences.Editor happyEditor;
+    private int timePassed;
+    public DrawThread(Context context, SurfaceHolder surfaceHolder, MyDraw myDraw, int timePassed) {
         this.view = view;
+        this.timePassed = timePassed;
         this.activityClass = activityClass;
         this.surfaceHolder = surfaceHolder;
         this.context = context;
-        foinShared = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
-        editor = foinShared.edit();
-        foin = foinShared.getInt("FOIN", 0);
+        foinSP = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
+        foinEditor = foinSP.edit();
+        foin = foinSP.getInt("FOIN", 0);
+        dirtSP = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
+        dirtEditor = dirtSP.edit();
+        hungrySP = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
+        hungryEditor = hungrySP.edit();
+        sleepSP = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
+        sleepEditor = sleepSP.edit();
+        happySP = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
+        happyEditor = happySP.edit();
         bitmapUsual1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.sovorakan1);
         bitmapUsual2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.sovorakan2);
         bitmapDTSH1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_t_s_h_1);
@@ -828,9 +846,6 @@ public class DrawThread extends Thread {
         tired = ResourcesCompat.getColor(context.getResources(),R.color.sleep,null);
         happy = ResourcesCompat.getColor(context.getResources(),R.color.happy,null);
     }
-    public int getFoin(){
-        return foin;
-    }
     private void takeScreenshot() {
         try {
             // image naming and path  to include sd card  appending name you choose for file
@@ -883,6 +898,10 @@ public class DrawThread extends Thread {
             Canvas canvas = surfaceHolder.lockCanvas();
             if (canvas != null) {
                 try {
+                    dirtRight = dirtSP.getFloat("DIRT", (float) canvas.getWidth() * 1040 / 1050);
+                    hungryRight = hungrySP.getFloat("HUNGRY", (float) canvas.getWidth() * 1040 / 1050);
+                    sleepRight = sleepSP.getFloat("SLEEP", (float) canvas.getWidth() * 1040 / 1050);
+                    happyRight = happySP.getFloat("HAPPY", (float) canvas.getWidth() * 1040 / 1050);
                     int ButtonWidth = canvas.getWidth()*106/1050;
                     int ButtonHeight = canvas.getHeight()*101/540;
                     paintBlack.setColor(Color.BLACK);
@@ -936,10 +955,6 @@ public class DrawThread extends Thread {
                     float dirtTop = (float) canvas.getHeight() * 55 / 540;
                     float dirtRight2 = (float) canvas.getWidth() * 1040 / 1050;
                     float dirtWeight = dirtRight2 - dirtLeft;
-                    if (m3 == 0) {
-                        dirtRight = (float) canvas.getWidth() * 1040 / 1050;
-                        m3 = 1;
-                    }
                     float dirtBottom = (float) canvas.getHeight() * 79 / 540;
                     canvas.drawRect((float) canvas.getWidth() * 876 / 1050, (float) canvas.getHeight() * 54 / 540,
                             (float) canvas.getWidth() * 1041 / 1050, (float) canvas.getHeight() * 80 / 540, paintBlack);
@@ -953,12 +968,14 @@ public class DrawThread extends Thread {
                         if (dirtRight - k * dirtWeight >= dirtLeft) {
                             k *= dirtWeight;
                             dirtRight -= k;
-                            canvas.drawRect(dirtLeft, dirtTop, dirtRight, dirtBottom, paintDirt);
+                            dirtEditor.putFloat("DIRT",dirtRight);
+                            dirtEditor.apply();
                             k /= dirtWeight;
                         }
                         if (dirtRight >= dirtLeft && dirtRight - k * dirtWeight < dirtLeft) {
                             dirtRight = dirtLeft;
-                            canvas.drawRect(dirtLeft, dirtTop, dirtRight, dirtBottom, paintDirt);
+                            dirtEditor.putFloat("DIRT",dirtRight);
+                            dirtEditor.apply();
                         }
                         dirtNeedToDrawNow = false;
                     }
@@ -966,10 +983,6 @@ public class DrawThread extends Thread {
                     paintHungry.setColor(hungry);
                     float hungryLeft = (float) canvas.getWidth() * 877 / 1050;
                     float hungryTop = (float) canvas.getHeight() * 92 / 540;
-                    if (n == 0) {
-                        hungryRight = (float) canvas.getWidth() * 1040 / 1050;
-                        n = 1;
-                    }
                     float hungryRight2 = (float) canvas.getWidth() * 1040 / 1050;
                     float hungryWeight = hungryRight2 - hungryLeft;
                     float hungryBottom = (float) canvas.getHeight() * 116 / 540;
@@ -985,12 +998,14 @@ public class DrawThread extends Thread {
                         if (hungryRight - h * hungryWeight >= hungryLeft) {
                             h *= hungryWeight;
                             hungryRight -= h;
-                            canvas.drawRect(hungryLeft, hungryTop, hungryRight, hungryBottom, paintHungry);
+                            hungryEditor.putFloat("HUNGRY",hungryRight);
+                            hungryEditor.apply();
                             h /= hungryWeight;
                         }
                         if (hungryRight >= hungryLeft && hungryRight - h * hungryWeight < hungryLeft) {
                             hungryRight = hungryLeft;
-                            canvas.drawRect(hungryLeft, hungryTop, hungryRight, hungryBottom, paintHungry);
+                            hungryEditor.putFloat("HUNGRY",hungryRight);
+                            hungryEditor.apply();
                         }
                         hungryNeedToDrawNow = false;
                     }
@@ -1000,10 +1015,6 @@ public class DrawThread extends Thread {
                     float sleepTop = (float) canvas.getHeight() * 129 / 540;
                     float sleepRight2 = (float) canvas.getWidth() * 1040 / 1050;
                     float sleepWeight = sleepRight2 - sleepLeft;
-                    if (m4 == 0) {
-                        sleepRight = (float) canvas.getWidth() * 1040 / 1050;
-                        m4 = 1;
-                    }
                     float sleepBottom = (float) canvas.getHeight() * 153 / 540;
                     canvas.drawRect((float) canvas.getWidth() * 876 / 1050, (float) canvas.getHeight() * 128 / 540,
                             (float) canvas.getWidth() * 1041 / 1050, (float) canvas.getHeight() * 154 / 540, paintBlack);
@@ -1017,12 +1028,14 @@ public class DrawThread extends Thread {
                         if (sleepRight - q * sleepWeight >= sleepLeft) {
                             q *= sleepWeight;
                             sleepRight -= q;
-                            canvas.drawRect(sleepLeft, sleepTop, sleepRight, sleepBottom, paintSleep);
+                            sleepEditor.putFloat("SLEEP",sleepRight);
+                            sleepEditor.apply();
                             q /= sleepWeight;
                         }
                         if (sleepRight >= sleepLeft && sleepRight - q * sleepWeight < sleepLeft) {
                             sleepRight = sleepLeft;
-                            canvas.drawRect(sleepLeft, sleepTop, sleepRight, sleepBottom, paintSleep);
+                            sleepEditor.putFloat("SLEEP",sleepRight);
+                            sleepEditor.apply();
                         }
                         sleepNeedToDrawNow = false;
                     }
@@ -1031,10 +1044,6 @@ public class DrawThread extends Thread {
                     paintHappy.setColor(happy);
                     float happyLeft = (float) canvas.getWidth() * 877 / 1050;
                     float happyTop = (float) canvas.getHeight() * 166 / 540;
-                    if (m1 == 0) {
-                        happyRight = (float) canvas.getWidth() * 1040 / 1050;
-                        m1 = 1;
-                    }
                     float happyRight2 = (float) canvas.getWidth() * 1040 / 1050;
                     float happyWeight = happyRight2 - happyLeft;
                     float happyBottom = (float) canvas.getHeight() * 190 / 540;
@@ -1050,12 +1059,14 @@ public class DrawThread extends Thread {
                         if (happyRight - s * happyWeight >= happyLeft) {
                             s *= happyWeight;
                             happyRight -= s;
-                            canvas.drawRect(happyLeft, happyTop, happyRight, happyBottom, paintHappy);
+                            happyEditor.putFloat("HAPPY",happyRight);
+                            happyEditor.apply();
                             s /= happyWeight;
                         }
                         if (happyRight >= happyLeft && happyRight - s * happyWeight < happyLeft) {
                             happyRight = happyLeft;
-                            canvas.drawRect(happyLeft, happyTop, happyRight, happyBottom, paintHappy);
+                            happyEditor.putFloat("HAPPY",happyRight);
+                            happyEditor.apply();
                         }
                         happyNeedToDrawNow = false;
                     }
@@ -1313,8 +1324,8 @@ public class DrawThread extends Thread {
                             foinTime = 0;
                             gettingFoin = false;
                             foin++;
-                            editor.putInt("FOIN",foin);
-                            editor.apply();
+                            foinEditor.putInt("FOIN",foin);
+                            foinEditor.apply();
                         }
                     }
                     foinBitmap = Bitmap.createScaledBitmap(foinBitmap, canvas.getWidth(), canvas.getHeight(), true);
@@ -1626,6 +1637,8 @@ public class DrawThread extends Thread {
                                 } else {
                                     hungryRight += food;
                                 }
+                                hungryEditor.putFloat("HUNGRY",hungryRight);
+                                hungryEditor.apply();
                                 food /= (hungryRight2 - hungryLeft);
                                 e = 1;
                             }
@@ -1658,8 +1671,12 @@ public class DrawThread extends Thread {
                         smile *= (happyRight2 - happyLeft);
                         if (happyRight + smile > happyRight2) {
                             happyRight = happyRight2;
+                            happyEditor.putFloat("HAPPY",happyRight);
+                            happyEditor.apply();
                         } else {
                             happyRight += smile;
+                            happyEditor.putFloat("HAPPY",happyRight);
+                            happyEditor.apply();
                         }
                         smile /= (happyRight2 - happyLeft);
                         if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1) bitmap = playBitmapDT[play];
@@ -1763,6 +1780,8 @@ public class DrawThread extends Thread {
                             } else {
                                 sleepRight += qun;
                             }
+                            sleepEditor.putFloat("SLEEP",sleepRight);
+                            sleepEditor.apply();
                             qun /= (sleepRight2 - sleepLeft);
                             r1 = 0;
                         }
@@ -1858,6 +1877,8 @@ public class DrawThread extends Thread {
                         birdY = (float) 31 / 540;
                         bitmap = washBitmap[wash];
                         if(wash == 10) dirtRight = dirtRight2;
+                        dirtEditor.putFloat("DIRT",dirtRight);
+                        dirtEditor.apply();
                         if(wash == 25) {
                             washing = false;
                             wash = 1;
