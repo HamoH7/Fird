@@ -30,7 +30,7 @@ public class DrawThread extends Thread {
     public Screenshot screenshot = new Screenshot();
     private Context context;
     private Bitmap bitmapScreen;
-    private int foin = 0;
+    private int foin = 0, level = 1;
     private float lastTouchX = 0;
     private float lastTouchY = 0;
     private float birdX = (float) 419/1050;
@@ -41,16 +41,17 @@ public class DrawThread extends Thread {
     private float screenshotHeight = (float) 73/540;
     private float screenshotX = (float) 962/1050;
     private float screenshotY = (float) 461/540;
-    private int disgust = 1, eatScore = 0, wash = 1,foinTime = 0, hit = 1,poop1=1,poop2=1,poop3=0, m = 0, n = 0, m1 = 0, m2 = 0, m3 = 0, m4 = 0,m6 = 0, eat = 1, e = 0, eatTimer = 10, m5 = 0, p = 0, playTimer = 15, sleepTimer = 60, play = 0, sleep = 0, r1 = 0, flyBack = 0;
-    private double h = (float)1/100;
-    private double s = (float) 1 / 100;
-    private double q = (float) 1 / 100;
-    private double k = (float) 1 / 100;
-    private double food = (float) 1 / 10;
-    private double smile = (float) 1 / 60;
-    private double qun = (float) 1 / 40;
-    private float hungryRight = 0, happyRight = 0, sleepRight = 0, dirtRight = 0, lifeRight = 0;
-    private int life, dirt, hungry, tired,happy;
+    private int disgust = 1, eatScore = 0, wash = 1,foinTime = 0, hit = 1,poop1=1,poop2=1,poop3=0, m = 0,m1 = 1, m6 = 0, eat = 1, e = 0, eatTimer = 10, m5 = 0, p = 0, playTimer = 15, sleepTimer = 60, play = 0, sleep = 0, r1 = 0, flyBack = 0;
+    private double h = (float)1/1000;
+    private double s = (float) 1 / 1000;
+    private double q = (float) 1 / 1000;
+    private double k = (float) 1 / 1000;
+    private double food = (float) 1;//food = (float) 1 / 10;
+    private double smile = (float) 1;//smile = (float) 1 / 60;
+    private double qun = (float) 1 / 1;//qun = (float) 1 / 40;
+    private double lvl = (float) 1 / 10;
+    private float hungryRight = 0, happyRight = 0, sleepRight = 0, dirtRight = 0, levelRight = 0;
+    private int levelColor, dirtColor, hungryColor, tiredColor, happyColor;
     private boolean ea = false, pl = false, sl = false, fl = false, sle = false, hi = false, wa = false, pop = false, po = false;
     private boolean playingTimeIsPassed = false;
     private boolean playingNeedToDrawNow = false;
@@ -103,6 +104,8 @@ public class DrawThread extends Thread {
     private boolean sleepNeedToDrawNow = false;
     private boolean dirtTimeIsPassed = false;
     private boolean dirtNeedToDrawNow = false;
+    private boolean levelTimeIsPassed = false;
+    private boolean levelNeedToDrawNow = false;
     private boolean timeIsPassed1 = false;
     private boolean needToDrawNow1 = false;
     private boolean timeIsPassed2 = false;
@@ -119,6 +122,8 @@ public class DrawThread extends Thread {
     private boolean check = false;
     private boolean checkSleep = false;
     private boolean isTouched = false;
+    private boolean statChecker;
+    private boolean lvlCheck;
     private View view;
     private Bitmap playButtonBitmap,playButtonBitmap2, playButtonBitmapA;
     private Bitmap sleepButtonBitmap,sleepButtonBitmap2,sleepButtonBitmapA;
@@ -140,6 +145,7 @@ public class DrawThread extends Thread {
     private Bitmap flyBitmapUsual[] = new Bitmap[5], flyBitmapDH[] = new Bitmap[5],flyBitmapDS[] = new Bitmap[5],flyBitmapD[] = new Bitmap[5], flyBitmapH[] = new Bitmap[5],flyBitmapSmile[] = new Bitmap[5], flyBitmapSDH[] = new Bitmap[5], flyBitmapSH[] = new Bitmap[5], flyBitmapS[] = new Bitmap[5], flyBitmapTDH[] = new Bitmap[5], flyBitmapTDSH[] = new Bitmap[5], flyBitmapTDS[] = new Bitmap[5], flyBitmapTD[] = new Bitmap[5], flyBitmapTH[] = new Bitmap[5], flyBitmapTSH[] = new Bitmap[5], flyBitmapTS[] = new Bitmap[5], flyBitmapT[] = new Bitmap[5];
     private Bitmap washBitmap[] = new Bitmap[26];
     private Bitmap getFoinBitmap[] = new Bitmap[8];
+    private Bitmap levelBitmap[] = new Bitmap[51];
     private Bitmap foinBitmap;
     private Bitmap poopingBitmapUsual[] = new Bitmap[11],poopingBitmapDSH[] = new Bitmap[11],poopingBitmapDH[] = new Bitmap[11],poopingBitmapDS[] = new Bitmap[11],poopingBitmapDTH[] = new Bitmap[11],poopingBitmapDTSH[] = new Bitmap[11],poopingBitmapDTS[] = new Bitmap[11],poopingBitmapDT[] = new Bitmap[11],poopingBitmapD[] = new Bitmap[11],poopingBitmapHS[] = new Bitmap[11],poopingBitmapH[] = new Bitmap[11],poopingBitmapTH[] = new Bitmap[11],poopingBitmapS[] = new Bitmap[11],poopingBitmapTHS[] = new Bitmap[11],poopingBitmapTS[] = new Bitmap[11],poopingBitmapT[] = new Bitmap[11];
     private Bitmap sleepUsual1, sleepUsual2, sleepDH1, sleepDH2, sleepDSH1, sleepDSH2, sleepDS1, sleepDS2, sleepD1, sleepD2, sleepH1, sleepH2, sleepSmile1, sleepSmile2, sleepSH1, sleepSH2, sleepS1, sleepS2;
@@ -147,41 +153,30 @@ public class DrawThread extends Thread {
     private volatile boolean running = true;
     private Class<Activity> activityClass;
     private Paint paint = new Paint();
-    private Paint paintLife = new Paint();
+    private Paint paintLevel = new Paint();
     private Paint paintDirt = new Paint();
     private Paint paintHungry = new Paint();
     private Paint paintSleep = new Paint();
     private Paint paintHappy = new Paint();
     private Paint paintBlack = new Paint();
     private Paint paintFoin = new Paint();
-    private SharedPreferences foinSP;
-    private SharedPreferences dirtSP;
-    private SharedPreferences hungrySP;
-    private SharedPreferences sleepSP;
-    private SharedPreferences happySP;
-    private SharedPreferences.Editor foinEditor;
-    private SharedPreferences.Editor dirtEditor;
-    private SharedPreferences.Editor hungryEditor;
-    private SharedPreferences.Editor sleepEditor;
-    private SharedPreferences.Editor happyEditor;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences2;
+    private SharedPreferences.Editor editor;
+    private SharedPreferences.Editor editor2;
     private int timePassed;
+    private float levelRight3;
     public DrawThread(Context context, SurfaceHolder surfaceHolder, MyDraw myDraw, int timePassed) {
         this.view = view;
         this.timePassed = timePassed;
         this.activityClass = activityClass;
         this.surfaceHolder = surfaceHolder;
         this.context = context;
-        foinSP = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
-        foinEditor = foinSP.edit();
-        foin = foinSP.getInt("FOIN", 0);
-        dirtSP = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
-        dirtEditor = dirtSP.edit();
-        hungrySP = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
-        hungryEditor = hungrySP.edit();
-        sleepSP = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
-        sleepEditor = sleepSP.edit();
-        happySP = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
-        happyEditor = happySP.edit();
+        sharedPreferences = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
+        sharedPreferences2 = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor2 = sharedPreferences2.edit();
+        foin = sharedPreferences.getInt("FOIN", 0);
         bitmapUsual1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.sovorakan1);
         bitmapUsual2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.sovorakan2);
         bitmapDTSH1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_t_s_h_1);
@@ -816,6 +811,24 @@ public class DrawThread extends Thread {
         getFoinBitmap[5] = BitmapFactory.decodeResource(context.getResources(), R.drawable.foin5);
         getFoinBitmap[6] = BitmapFactory.decodeResource(context.getResources(), R.drawable.foin6);
         getFoinBitmap[7] = BitmapFactory.decodeResource(context.getResources(), R.drawable.foin7);
+        levelBitmap[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.level1);
+        levelBitmap[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.level2);
+        levelBitmap[3] = BitmapFactory.decodeResource(context.getResources(), R.drawable.level3);
+        levelBitmap[4] = BitmapFactory.decodeResource(context.getResources(), R.drawable.level4);
+        levelBitmap[5] = BitmapFactory.decodeResource(context.getResources(), R.drawable.level5);
+        levelBitmap[6] = BitmapFactory.decodeResource(context.getResources(), R.drawable.level6);
+        levelBitmap[7] = BitmapFactory.decodeResource(context.getResources(), R.drawable.level7);
+        levelBitmap[8] = BitmapFactory.decodeResource(context.getResources(), R.drawable.level8);
+        levelBitmap[9] = BitmapFactory.decodeResource(context.getResources(), R.drawable.level9);
+        levelBitmap[10] =BitmapFactory.decodeResource(context.getResources(), R.drawable.level10);
+        levelBitmap[11] = BitmapFactory.decodeResource(context.getResources(), R.drawable.level11);
+        levelBitmap[12] = BitmapFactory.decodeResource(context.getResources(), R.drawable.level12);
+        levelBitmap[13] = BitmapFactory.decodeResource(context.getResources(), R.drawable.level13);
+        levelBitmap[14] = BitmapFactory.decodeResource(context.getResources(), R.drawable.level14);
+        levelBitmap[15] = BitmapFactory.decodeResource(context.getResources(), R.drawable.level15);
+        levelBitmap[16] = BitmapFactory.decodeResource(context.getResources(), R.drawable.level16);
+        levelBitmap[17] = BitmapFactory.decodeResource(context.getResources(), R.drawable.level17);
+        levelBitmap[18] = BitmapFactory.decodeResource(context.getResources(), R.drawable.level18);
         washButtonBitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.lvacvelu_knopka);
         washButtonBitmap2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.lvacvelu_knopka);
         washButtonBitmapA = BitmapFactory.decodeResource(context.getResources(),R.drawable.lvacvelu_knopkaa);
@@ -840,11 +853,11 @@ public class DrawThread extends Thread {
         screenshotBitmap =  BitmapFactory.decodeResource(context.getResources(),R.drawable.screenshot);
         shopButton =  BitmapFactory.decodeResource(context.getResources(),R.drawable.xanut);
         bitmap = bitmapSmile1;
-        life = ResourcesCompat.getColor(context.getResources(),R.color.life,null);
-        dirt = ResourcesCompat.getColor(context.getResources(),R.color.dirt,null);
-        hungry = ResourcesCompat.getColor(context.getResources(),R.color.hungry,null);
-        tired = ResourcesCompat.getColor(context.getResources(),R.color.sleep,null);
-        happy = ResourcesCompat.getColor(context.getResources(),R.color.happy,null);
+        levelColor = ResourcesCompat.getColor(context.getResources(),R.color.life,null);
+        dirtColor = ResourcesCompat.getColor(context.getResources(),R.color.dirt,null);
+        hungryColor = ResourcesCompat.getColor(context.getResources(),R.color.hungry,null);
+        tiredColor = ResourcesCompat.getColor(context.getResources(),R.color.sleep,null);
+        happyColor = ResourcesCompat.getColor(context.getResources(),R.color.happy,null);
     }
     private void takeScreenshot() {
         try {
@@ -898,10 +911,16 @@ public class DrawThread extends Thread {
             Canvas canvas = surfaceHolder.lockCanvas();
             if (canvas != null) {
                 try {
-                    dirtRight = dirtSP.getFloat("DIRT", (float) canvas.getWidth() * 1040 / 1050);
-                    hungryRight = hungrySP.getFloat("HUNGRY", (float) canvas.getWidth() * 1040 / 1050);
-                    sleepRight = sleepSP.getFloat("SLEEP", (float) canvas.getWidth() * 1040 / 1050);
-                    happyRight = happySP.getFloat("HAPPY", (float) canvas.getWidth() * 1040 / 1050);
+                    dirtRight = sharedPreferences.getFloat("DIRT", (float) canvas.getWidth() * 1040 / 1050);
+                    hungryRight = sharedPreferences.getFloat("HUNGRY", (float) canvas.getWidth() * 1040 / 1050);
+                    sleepRight = sharedPreferences.getFloat("SLEEP", (float) canvas.getWidth() * 1040 / 1050);
+                    happyRight = sharedPreferences.getFloat("HAPPY", (float) canvas.getWidth() * 1040 / 1050);
+                    levelRight = sharedPreferences.getFloat("LEVELRIGHT",(float) canvas.getWidth() * 844 / 1050);
+                    level = sharedPreferences2.getInt("LEVEL",(int)1);
+                    //editor.putFloat("LEVEL",(float) canvas.getWidth() * 844 / 1050);
+                    //editor.apply();
+                    statChecker =  sharedPreferences.getBoolean("STATCHECKER", true);
+                    lvlCheck = sharedPreferences.getBoolean("LVLCHECK",false);
                     int ButtonWidth = canvas.getWidth()*106/1050;
                     int ButtonHeight = canvas.getHeight()*101/540;
                     paintBlack.setColor(Color.BLACK);
@@ -916,13 +935,11 @@ public class DrawThread extends Thread {
                     paint.setAntiAlias(true);
                     paintFoin.setSubpixelText(true);
                     paintFoin.setAntiAlias(true);
-                    paintLife.setSubpixelText(true);
-                    paintLife.setAntiAlias(true);
+                    paintLevel.setSubpixelText(true);
+                    paintLevel.setAntiAlias(true);
                     paintBlack.setSubpixelText(true);
                     paintBlack.setAntiAlias(true);
                     paintFoin.setColor(Color.BLACK);
-
-
                     //hetevi fon
                     if (!flying && !sleeping && !laying) {
                         canvas.drawBitmap(bitmapbg, 0, 0, paint);
@@ -931,26 +948,17 @@ public class DrawThread extends Thread {
                         canvas.drawBitmap(bitmapDarkbg, 0, 0, paint);
                         canvas.drawBitmap(bitmapDarkkust, (float) canvas.getWidth() * 29 / 1050, (float) canvas.getHeight() * 230 / 540, paint);
                     }
-                    //// highscore/score
-                    //highScoreBitmap = Bitmap.createScaledBitmap(highScoreBitmap,canvas.getWidth()*212/1050,canvas.getHeight()*53/540,true);
-                    //canvas.drawBitmap(highScoreBitmap,0,(float)canvas.getHeight()*10/540,paint);
-                    //scoreBitmap = Bitmap.createScaledBitmap(scoreBitmap,canvas.getWidth()*119/1050,canvas.getHeight()*43/540,true);
-                    //canvas.drawBitmap(scoreBitmap,0,(float)canvas.getHeight()*67/540,paint);
-                    // kyanqy
-                    float lifeLeft = (float) canvas.getWidth() * 844 / 1050;
-                    float lifeTop = (float) canvas.getHeight() * 8 / 540;
-                    if (m2 == 0) {
-                        lifeRight = (float) canvas.getWidth() * 1040 / 1050;
-                        m2 = 1;
-                    }
-                    float lifeRight2 = (float) canvas.getWidth() * 1040 / 1050;
-                    float lifeBottom = (float) canvas.getHeight() * 42 / 540;
-                    paintLife.setColor(life);
+                    // lvl
+                    float levelLeft = (float) canvas.getWidth() * 844 / 1050;
+                    float levelTop = (float) canvas.getHeight() * 8 / 540;
+                    float levelRight2 = (float) canvas.getWidth() * 1040 / 1050;
+                    float levelBottom = (float) canvas.getHeight() * 42 / 540;
+                    paintLevel.setColor(levelColor);
                     canvas.drawRect((float) canvas.getWidth() * 843 / 1050, (float) canvas.getHeight() * 7 / 540,
                             (float) canvas.getWidth() * 1041 / 1050, (float) canvas.getHeight() * 43 / 540, paintBlack);
-                    canvas.drawRect(lifeLeft, lifeTop, lifeRight, lifeBottom, paintLife);
+                    canvas.drawRect(levelLeft, levelTop, levelRight, levelBottom, paintLevel);
                     // kextotutyun
-                    paintDirt.setColor(dirt);
+                    paintDirt.setColor(dirtColor);
                     float dirtLeft = (float) canvas.getWidth() * 877 / 1050;
                     float dirtTop = (float) canvas.getHeight() * 55 / 540;
                     float dirtRight2 = (float) canvas.getWidth() * 1040 / 1050;
@@ -968,19 +976,19 @@ public class DrawThread extends Thread {
                         if (dirtRight - k * dirtWeight >= dirtLeft) {
                             k *= dirtWeight;
                             dirtRight -= k;
-                            dirtEditor.putFloat("DIRT",dirtRight);
-                            dirtEditor.apply();
+                            editor.putFloat("DIRT",dirtRight);
+                            editor.apply();
                             k /= dirtWeight;
                         }
                         if (dirtRight >= dirtLeft && dirtRight - k * dirtWeight < dirtLeft) {
                             dirtRight = dirtLeft;
-                            dirtEditor.putFloat("DIRT",dirtRight);
-                            dirtEditor.apply();
+                            editor.putFloat("DIRT",dirtRight);
+                            editor.apply();
                         }
                         dirtNeedToDrawNow = false;
                     }
                     // sov
-                    paintHungry.setColor(hungry);
+                    paintHungry.setColor(hungryColor);
                     float hungryLeft = (float) canvas.getWidth() * 877 / 1050;
                     float hungryTop = (float) canvas.getHeight() * 92 / 540;
                     float hungryRight2 = (float) canvas.getWidth() * 1040 / 1050;
@@ -998,19 +1006,19 @@ public class DrawThread extends Thread {
                         if (hungryRight - h * hungryWeight >= hungryLeft) {
                             h *= hungryWeight;
                             hungryRight -= h;
-                            hungryEditor.putFloat("HUNGRY",hungryRight);
-                            hungryEditor.apply();
+                            editor.putFloat("HUNGRY",hungryRight);
+                            editor.apply();
                             h /= hungryWeight;
                         }
                         if (hungryRight >= hungryLeft && hungryRight - h * hungryWeight < hungryLeft) {
                             hungryRight = hungryLeft;
-                            hungryEditor.putFloat("HUNGRY",hungryRight);
-                            hungryEditor.apply();
+                            editor.putFloat("HUNGRY",hungryRight);
+                            editor.apply();
                         }
                         hungryNeedToDrawNow = false;
                     }
                     // qun
-                    paintSleep.setColor(tired);
+                    paintSleep.setColor(tiredColor);
                     float sleepLeft = (float) canvas.getWidth() * 877 / 1050;
                     float sleepTop = (float) canvas.getHeight() * 129 / 540;
                     float sleepRight2 = (float) canvas.getWidth() * 1040 / 1050;
@@ -1028,20 +1036,20 @@ public class DrawThread extends Thread {
                         if (sleepRight - q * sleepWeight >= sleepLeft) {
                             q *= sleepWeight;
                             sleepRight -= q;
-                            sleepEditor.putFloat("SLEEP",sleepRight);
-                            sleepEditor.apply();
+                            editor.putFloat("SLEEP",sleepRight);
+                            editor.apply();
                             q /= sleepWeight;
                         }
                         if (sleepRight >= sleepLeft && sleepRight - q * sleepWeight < sleepLeft) {
                             sleepRight = sleepLeft;
-                            sleepEditor.putFloat("SLEEP",sleepRight);
-                            sleepEditor.apply();
+                            editor.putFloat("SLEEP",sleepRight);
+                            editor.apply();
                         }
                         sleepNeedToDrawNow = false;
                     }
 
                     // uraxutyun
-                    paintHappy.setColor(happy);
+                    paintHappy.setColor(happyColor);
                     float happyLeft = (float) canvas.getWidth() * 877 / 1050;
                     float happyTop = (float) canvas.getHeight() * 166 / 540;
                     float happyRight2 = (float) canvas.getWidth() * 1040 / 1050;
@@ -1059,20 +1067,22 @@ public class DrawThread extends Thread {
                         if (happyRight - s * happyWeight >= happyLeft) {
                             s *= happyWeight;
                             happyRight -= s;
-                            happyEditor.putFloat("HAPPY",happyRight);
-                            happyEditor.apply();
+                            editor.putFloat("HAPPY",happyRight);
+                            editor.apply();
                             s /= happyWeight;
                         }
                         if (happyRight >= happyLeft && happyRight - s * happyWeight < happyLeft) {
                             happyRight = happyLeft;
-                            happyEditor.putFloat("HAPPY",happyRight);
-                            happyEditor.apply();
+                            editor.putFloat("HAPPY",happyRight);
+                            editor.apply();
                         }
                         happyNeedToDrawNow = false;
                     }
-                    // srtik
-                    bitmapHeart = Bitmap.createScaledBitmap(bitmapHeart, canvas.getWidth() * 49 / 1050, canvas.getHeight() * 46 / 540, true);
-                    canvas.drawBitmap(bitmapHeart, (float) canvas.getWidth() * 816 / 1050, 0, paint);
+                    // level
+                    for (int i = 1; i < 19; i++) {
+                        levelBitmap[i] = Bitmap.createScaledBitmap(levelBitmap[i], canvas.getWidth() * 45 / 1050, canvas.getHeight() * 45 / 540, true);
+                    }
+                    canvas.drawBitmap(levelBitmap[level], (float) canvas.getWidth() * 815 / 1050, (float) canvas.getHeight()*2/540, paint);
                     // kext
                     bitmapDirt = Bitmap.createScaledBitmap(bitmapDirt, canvas.getWidth() * 60 / 1050, canvas.getHeight() * 51 / 540, true);
                     canvas.drawBitmap(bitmapDirt, (float) canvas.getWidth() * 840 / 1050, (float) canvas.getHeight() * 41 / 540, paint);
@@ -1324,8 +1334,8 @@ public class DrawThread extends Thread {
                             foinTime = 0;
                             gettingFoin = false;
                             foin++;
-                            foinEditor.putInt("FOIN",foin);
-                            foinEditor.apply();
+                            editor.putInt("FOIN",foin);
+                            editor.apply();
                         }
                     }
                     foinBitmap = Bitmap.createScaledBitmap(foinBitmap, canvas.getWidth(), canvas.getHeight(), true);
@@ -1637,8 +1647,8 @@ public class DrawThread extends Thread {
                                 } else {
                                     hungryRight += food;
                                 }
-                                hungryEditor.putFloat("HUNGRY",hungryRight);
-                                hungryEditor.apply();
+                                editor.putFloat("HUNGRY",hungryRight);
+                                editor.apply();
                                 food /= (hungryRight2 - hungryLeft);
                                 e = 1;
                             }
@@ -1671,12 +1681,12 @@ public class DrawThread extends Thread {
                         smile *= (happyRight2 - happyLeft);
                         if (happyRight + smile > happyRight2) {
                             happyRight = happyRight2;
-                            happyEditor.putFloat("HAPPY",happyRight);
-                            happyEditor.apply();
+                            editor.putFloat("HAPPY",happyRight);
+                            editor.apply();
                         } else {
                             happyRight += smile;
-                            happyEditor.putFloat("HAPPY",happyRight);
-                            happyEditor.apply();
+                            editor.putFloat("HAPPY",happyRight);
+                            editor.apply();
                         }
                         smile /= (happyRight2 - happyLeft);
                         if(bitmap1 == bitmapDT1 || bitmap1 == bitmapDTH1 || bitmap1 == bitmapDTS1 || bitmap1 == bitmapDTSH1) bitmap = playBitmapDT[play];
@@ -1780,8 +1790,8 @@ public class DrawThread extends Thread {
                             } else {
                                 sleepRight += qun;
                             }
-                            sleepEditor.putFloat("SLEEP",sleepRight);
-                            sleepEditor.apply();
+                            editor.putFloat("SLEEP",sleepRight);
+                            editor.apply();
                             qun /= (sleepRight2 - sleepLeft);
                             r1 = 0;
                         }
@@ -1877,8 +1887,8 @@ public class DrawThread extends Thread {
                         birdY = (float) 31 / 540;
                         bitmap = washBitmap[wash];
                         if(wash == 10) dirtRight = dirtRight2;
-                        dirtEditor.putFloat("DIRT",dirtRight);
-                        dirtEditor.apply();
+                        editor.putFloat("DIRT",dirtRight);
+                        editor.apply();
                         if(wash == 25) {
                             washing = false;
                             wash = 1;
@@ -1942,6 +1952,38 @@ public class DrawThread extends Thread {
                     }
                     screenshotBitmap = Bitmap.createScaledBitmap(screenshotBitmap,canvas.getWidth() * 73/1050,canvas.getHeight()*73/540,true);
                     canvas.drawBitmap(screenshotBitmap, (float) canvas.getWidth() *screenshotX,(float) canvas.getHeight()*screenshotY,paint);
+                    //lvl+
+                    if(bitmap1==bitmapSmile1 && statChecker) {
+                        lvlCheck = true;
+                        new LevelTimerThread().start();
+                    }
+                    if(lvlCheck){
+                        lvl *= (levelRight2 - levelLeft);
+                        if(m1 == 1){
+                            levelRight3 = levelRight;
+                            m1 = 0;
+                        }
+                        if (levelRight <= lvl + levelRight3) {
+                            if (levelRight + lvl > levelRight2) {
+                                level++;
+                                editor2.putInt("LEVEL",level);
+                                editor2.apply();
+                                levelRight = levelLeft;
+                                editor.putFloat("LEVELRIGHT", levelRight);
+                                editor.apply();
+                            } else {
+                                levelRight += 10;
+                                editor.putFloat("LEVELRIGHT", levelRight);
+                                editor.apply();
+                            }
+                        }
+                        else {
+                            lvlCheck = false;
+                            m1 = 1;
+                            canvas.drawCircle(0,0,100,paintDirt);
+                        }
+                        lvl /= (levelRight2 - levelLeft);
+                    }
                     // cit
                     canvas.drawBitmap(bitmap,(float) canvas.getWidth() *birdX,(float) canvas.getHeight()*birdY,paint);
                 } finally {
@@ -1950,7 +1992,36 @@ public class DrawThread extends Thread {
             }
         }
     }
+    class LevelThread extends  Thread{
+        @Override
+        public void run() {
+            try {
+                sleep(1000);
+                levelTimeIsPassed = false;
+                levelNeedToDrawNow = true;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
+        }
+    }
+    class LevelTimerThread extends Thread{
+        @Override
+        public void run() {
+            try {
+                statChecker = false;
+                editor.putBoolean("STATCHECKER",false);
+                editor.apply();
+                sleep(300000);
+                statChecker = true;
+                editor.putBoolean("STATCHECKER",true);
+                editor.apply();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
     class DirtTimerThread extends  Thread{
         @Override
         public void run() {

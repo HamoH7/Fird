@@ -26,10 +26,9 @@ import java.util.Locale;
 import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
-    //private int timePassed = 0;
+    private int timePassed = 0;
     //private Context context = this;
-    //private SharedPreferences timePassedsp = PreferenceManager
-    //        .getDefaultSharedPreferences(this);
+    //private SharedPreferences timePassedsp = getApplicationContext().getSharedPreferences("TIMEPASSED", MODE_PRIVATE);
     //private SharedPreferences.Editor editor = timePassedsp.edit();
     //private Date currentDate;
     //private DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss",Locale.getDefault());
