@@ -122,8 +122,8 @@ public class DrawThread extends Thread {
     private boolean check = false;
     private boolean checkSleep = false;
     private boolean isTouched = false;
-    private boolean statChecker;
-    private boolean lvlCheck;
+    private boolean statChecker = true;
+    private boolean lvlCheck = false;
     private View view;
     private Bitmap playButtonBitmap,playButtonBitmap2, playButtonBitmapA;
     private Bitmap sleepButtonBitmap,sleepButtonBitmap2,sleepButtonBitmapA;
@@ -916,11 +916,11 @@ public class DrawThread extends Thread {
                     sleepRight = sharedPreferences.getFloat("SLEEP", (float) canvas.getWidth() * 1040 / 1050);
                     happyRight = sharedPreferences.getFloat("HAPPY", (float) canvas.getWidth() * 1040 / 1050);
                     levelRight = sharedPreferences.getFloat("LEVELRIGHT",(float) canvas.getWidth() * 844 / 1050);
-                    level = sharedPreferences2.getInt("LEVEL",(int)1);
+                    //level = sharedPreferences2.getInt("LEVEL",(int)1);
                     //editor.putFloat("LEVEL",(float) canvas.getWidth() * 844 / 1050);
                     //editor.apply();
-                    statChecker =  sharedPreferences.getBoolean("STATCHECKER", true);
-                    lvlCheck = sharedPreferences.getBoolean("LVLCHECK",false);
+                    //statChecker =  sharedPreferences.getBoolean("STATCHECKER", true);
+                    //lvlCheck = sharedPreferences.getBoolean("LVLCHECK",false);
                     int ButtonWidth = canvas.getWidth()*106/1050;
                     int ButtonHeight = canvas.getHeight()*101/540;
                     paintBlack.setColor(Color.BLACK);
@@ -1954,8 +1954,14 @@ public class DrawThread extends Thread {
                     canvas.drawBitmap(screenshotBitmap, (float) canvas.getWidth() *screenshotX,(float) canvas.getHeight()*screenshotY,paint);
                     //lvl+
                     if(bitmap1==bitmapSmile1 && statChecker) {
+                        statChecker = false;
+                        //editor.putBoolean("STATCHECKER",false);
+                        //editor.apply();
                         lvlCheck = true;
+                        //editor.putBoolean("LVLCHECK",true);
+                       // editor.apply();
                         new LevelTimerThread().start();
+                        canvas.drawCircle(0,0,100,paintDirt);
                     }
                     if(lvlCheck){
                         lvl *= (levelRight2 - levelLeft);
@@ -1966,19 +1972,21 @@ public class DrawThread extends Thread {
                         if (levelRight <= lvl + levelRight3) {
                             if (levelRight + lvl > levelRight2) {
                                 level++;
-                                editor2.putInt("LEVEL",level);
-                                editor2.apply();
+                                //editor2.putInt("LEVEL",level);
+                                //editor2.apply();
                                 levelRight = levelLeft;
                                 editor.putFloat("LEVELRIGHT", levelRight);
                                 editor.apply();
                             } else {
-                                levelRight += 10;
+                                levelRight += 1;
                                 editor.putFloat("LEVELRIGHT", levelRight);
                                 editor.apply();
                             }
                         }
                         else {
                             lvlCheck = false;
+                            //editor.putBoolean("LVLCHECK",false);
+                            //editor.apply();
                             m1 = 1;
                             canvas.drawCircle(0,0,100,paintDirt);
                         }
@@ -2009,9 +2017,6 @@ public class DrawThread extends Thread {
         @Override
         public void run() {
             try {
-                statChecker = false;
-                editor.putBoolean("STATCHECKER",false);
-                editor.apply();
                 sleep(300000);
                 statChecker = true;
                 editor.putBoolean("STATCHECKER",true);
