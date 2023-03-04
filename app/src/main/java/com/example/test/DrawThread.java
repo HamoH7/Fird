@@ -161,9 +161,7 @@ public class DrawThread extends Thread {
     private Paint paintBlack = new Paint();
     private Paint paintFoin = new Paint();
     private SharedPreferences sharedPreferences;
-    private SharedPreferences sharedPreferences2;
     private SharedPreferences.Editor editor;
-    private SharedPreferences.Editor editor2;
     private int timePassed;
     private float levelRight3;
     public DrawThread(Context context, SurfaceHolder surfaceHolder, MyDraw myDraw, int timePassed) {
@@ -173,10 +171,9 @@ public class DrawThread extends Thread {
         this.surfaceHolder = surfaceHolder;
         this.context = context;
         sharedPreferences = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
-        sharedPreferences2 = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        editor2 = sharedPreferences2.edit();
         foin = sharedPreferences.getInt("FOIN", 0);
+        level = sharedPreferences.getInt("LEVEL", 1);
         bitmapUsual1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.sovorakan1);
         bitmapUsual2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.sovorakan2);
         bitmapDTSH1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_t_s_h_1);
@@ -916,9 +913,6 @@ public class DrawThread extends Thread {
                     sleepRight = sharedPreferences.getFloat("SLEEP", (float) canvas.getWidth() * 1040 / 1050);
                     happyRight = sharedPreferences.getFloat("HAPPY", (float) canvas.getWidth() * 1040 / 1050);
                     levelRight = sharedPreferences.getFloat("LEVELRIGHT",(float) canvas.getWidth() * 844 / 1050);
-                    //level = sharedPreferences2.getInt("LEVEL",(int)1);
-                    //editor.putFloat("LEVEL",(float) canvas.getWidth() * 844 / 1050);
-                    //editor.apply();
                     //statChecker =  sharedPreferences.getBoolean("STATCHECKER", true);
                     //lvlCheck = sharedPreferences.getBoolean("LVLCHECK",false);
                     int ButtonWidth = canvas.getWidth()*106/1050;
@@ -1972,8 +1966,8 @@ public class DrawThread extends Thread {
                         if (levelRight <= lvl + levelRight3) {
                             if (levelRight + lvl > levelRight2) {
                                 level++;
-                                //editor2.putInt("LEVEL",level);
-                                //editor2.apply();
+                                editor.putInt("LEVEL",level);
+                                editor.apply();
                                 levelRight = levelLeft;
                                 editor.putFloat("LEVELRIGHT", levelRight);
                                 editor.apply();
