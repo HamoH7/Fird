@@ -27,31 +27,34 @@ import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
     private int timePassed = 0;
-    //private SharedPreferences timePassedsp = getApplicationContext().getSharedPreferences("TIMEPASSED", MODE_PRIVATE);
-    //private SharedPreferences.Editor editor = timePassedsp.edit();
-    //private Date currentDate;
-    //private DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss",Locale.getDefault());
-    //private String timeText = timeFormat.format(currentDate);
+    private Date currentDate = new Date();
+    private SharedPreferences timePassedsp;
+    private SharedPreferences.Editor editor;
+    private DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss",Locale.getDefault());
+    private String timeText = timeFormat.format(currentDate);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
-        //timePassed = timePassedsp.getInt("TIMEPASSED", 0);
-        setContentView(new MyDraw(this, 0));
+        timeText = timeFormat.format(currentDate);
+        timePassed = ((timeText.indexOf(0)*10+timeText.indexOf(1))*3600)+((timeText.indexOf(3)*10+timeText.indexOf(4))*60)+((timeText.indexOf(6)*10+timeText.indexOf(7)));
+        timePassedsp = getApplicationContext().getSharedPreferences("TIMEPASSED", MODE_PRIVATE);
+        editor = timePassedsp.edit();
+        setContentView(new MyDraw(this, timePassed - timePassedsp.getInt("TIMEPASSED", timePassed)));
         //setContentView(R.layout.shopskin);
     }
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //timeText = timeFormat.format(currentDate);
-        //timePassed = ((timeText.indexOf(0)*10+timeText.indexOf(1))*3600)+((timeText.indexOf(3)*10+timeText.indexOf(4))*60)+((timeText.indexOf(6)*10+timeText.indexOf(7)));
-        //editor.putInt("TIMEPASSED",timePassed);
+        timeText = timeFormat.format(currentDate);
+        timePassed = ((timeText.indexOf(0)*10+timeText.indexOf(1))*3600)+((timeText.indexOf(3)*10+timeText.indexOf(4))*60)+((timeText.indexOf(6)*10+timeText.indexOf(7)));
+        editor.putInt("TIMEPASSED",timePassed);
     }
     @Override
     protected void onStop() {
         super.onStop();
-        //timeText = timeFormat.format(currentDate);
-        //timePassed = ((timeText.indexOf(0)*10+timeText.indexOf(1))*3600)+((timeText.indexOf(3)*10+timeText.indexOf(4))*60)+((timeText.indexOf(6)*10+timeText.indexOf(7)));
-        //editor.putInt("TIMEPASSED",timePassed);
+        timeText = timeFormat.format(currentDate);
+        timePassed = ((timeText.indexOf(0)*10+timeText.indexOf(1))*3600)+((timeText.indexOf(3)*10+timeText.indexOf(4))*60)+((timeText.indexOf(6)*10+timeText.indexOf(7)));
+        editor.putInt("TIMEPASSED",timePassed);
     }
 }

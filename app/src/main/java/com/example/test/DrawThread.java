@@ -150,15 +150,6 @@ public class DrawThread extends Thread {
     private Bitmap poopingBitmapUsual[] = new Bitmap[11],poopingBitmapDSH[] = new Bitmap[11],poopingBitmapDH[] = new Bitmap[11],poopingBitmapDS[] = new Bitmap[11],poopingBitmapDTH[] = new Bitmap[11],poopingBitmapDTSH[] = new Bitmap[11],poopingBitmapDTS[] = new Bitmap[11],poopingBitmapDT[] = new Bitmap[11],poopingBitmapD[] = new Bitmap[11],poopingBitmapHS[] = new Bitmap[11],poopingBitmapH[] = new Bitmap[11],poopingBitmapTH[] = new Bitmap[11],poopingBitmapS[] = new Bitmap[11],poopingBitmapTHS[] = new Bitmap[11],poopingBitmapTS[] = new Bitmap[11],poopingBitmapT[] = new Bitmap[11];
     private Bitmap sleepUsual1, sleepUsual2, sleepDH1, sleepDH2, sleepDSH1, sleepDSH2, sleepDS1, sleepDS2, sleepD1, sleepD2, sleepH1, sleepH2, sleepSmile1, sleepSmile2, sleepSH1, sleepSH2, sleepS1, sleepS2;
     private Bitmap shopButton;
-    private int contentsArray[] = {R.drawable.sovorakan1,R.drawable.sovorakan2,R.drawable.d_t_s_h_1,R.drawable.d_t_s_h_2,R.drawable.d_t_s_1,R.drawable.d_t_s_2,R.drawable.d_t_h_1,R.drawable.d_t_h_2,R.drawable.d_s_h_1,R.drawable.d_s_h_2,R.drawable.t_s_h_1, R.drawable.t_s_h_2,R.drawable.d_h_1,R.drawable.d_h_2,R.drawable.d_s_1,R.drawable.d_s_2,R.drawable.d_t_1,R.drawable.d_t_2,R.drawable.s_h_1,R.drawable.s_h_2,R.drawable.t_h_1,R.drawable.t_h_2,R.drawable.t_s_1,R.drawable.t_s_2,R.drawable.kextot1,R.drawable.kextot2, R.drawable.hognac1,R.drawable.hognac2,R.drawable.txur1,R.drawable.txur2,R.drawable.sovac1,R.drawable.sovac2,R.drawable.urax1,R.drawable.urax2,R.drawable.utox1, R.drawable.utox2, R.drawable.utox3, R.drawable.utox4, R.drawable.utox5, R.drawable.utox6, R.drawable.utox7, R.drawable.utox8,R.drawable.utox9,R.drawable.utox10,R.drawable.xaxacox1,R.drawable.xaxacox2,R.drawable.xaxacox3,R.drawable.xaxacox4,R.drawable.xaxacox5,R.drawable.xaxacox6,R.drawable.xaxacox7,R.drawable.xaxacox8,R.drawable.xaxacox9,R.drawable.xaxacox10,R.drawable.xaxacox11,R.drawable.xaxacox12,R.drawable.xaxacox13,R.drawable.xaxacox14,R.drawable.xaxacox15,R.drawable.xaxacox16,R.drawable.xaxacox17,R.drawable.xaxacox18,R.drawable.xaxacox19,R.drawable.xaxacox20,R.drawable.d_xaxacox1,R.drawable.d_xaxacox2,R.drawable.d_xaxacox3,R.drawable.d_xaxacox4,R.drawable.d_xaxacox5,R.drawable.d_xaxacox6,R.drawable.d_xaxacox7,R.drawable.d_xaxacox8,R.drawable.d_xaxacox9,R.drawable.d_xaxacox10,R.drawable.d_xaxacox11,R.drawable.d_xaxacox12,R.drawable.d_xaxacox13,R.drawable.d_xaxacox14,R.drawable.d_xaxacox15,R.drawable.d_xaxacox16,R.drawable.d_xaxacox17, R.drawable.d_xaxacox18,R.drawable.d_xaxacox19,R.drawable.d_xaxacox20,R.drawable.xaxacox1,R.drawable.xaxacox2,R.drawable.xaxacox3,R.drawable.xaxacox4,R.drawable.xaxacox5,R.drawable.xaxacox6,R.drawable.xaxacox7,R.drawable.xaxacox8,R.drawable.xaxacox9, R.drawable.xaxacox10,R.drawable.xaxacox11,R.drawable.xaxacox12,R.drawable.xaxacox13,R.drawable.xaxacox14,R.drawable.xaxacox15,R.drawable.xaxacox16,R.drawable.xaxacox17,R.drawable.xaxacox18,R.drawable.t_xaxacox19,R.drawable.t_xaxacox20, R.drawable.d_xaxacox1,R.drawable.d_xaxacox2,R.drawable.d_xaxacox3,R.drawable.d_xaxacox4,R.drawable.d_xaxacox5,R.drawable.d_xaxacox6,R.drawable.d_xaxacox7,R.drawable.d_xaxacox8,R.drawable.d_xaxacox9,R.drawable.d_xaxacox10,R.drawable.d_xaxacox11, R.drawable.d_xaxacox12,R.drawable.d_xaxacox13,R.drawable.d_xaxacox14,R.drawable.d_xaxacox15,R.drawable.d_xaxacox16,R.drawable.d_xaxacox17,R.drawable.d_xaxacox18,R.drawable.d_t_xaxacox19,R.drawable.d_t_xaxacox20,R.drawable.trnox_cit1,R.drawable.trnox_cit2, R.drawable.trnox_cit3,R.drawable.trnox_cit4,R.drawable.f_d_h1,R.drawable.f_d_h2,R.drawable.f_d_h3,R.drawable.f_d_h4,R.drawable.f_d1,R.drawable.f_d2,R.drawable.f_d3,R.drawable.f_d4
-            ,R.drawable.f_h1,R.drawable.f_h2,R.drawable.f_h3,R.drawable.f_h4,R.drawable.f_hp1,R.drawable.f_hp2,R.drawable.f_hp3,R.drawable.f_hp4,R.drawable.f_s_d_h1,R.drawable.f_s_d_h2,R.drawable.f_s_d_h3,R.drawable.f_s_d_h4,R.drawable.f_s_h1,R.drawable.f_s_h2,R.drawable.f_s_h3,R.drawable.f_s_h4,R.drawable.f_s1,R.drawable.f_s2,R.drawable.f_s3
-            ,R.drawable.f_s4,R.drawable.f_t_d_h1,R.drawable.f_t_d_h2,R.drawable.f_d_h3,R.drawable.f_d_h4,R.drawable.f_t_d_s_h1,R.drawable.f_t_d_s_h2,R.drawable.f_s_d_h3,R.drawable.f_s_d_h4};
-    private Bitmap bitmapsArray[] = {bitmapUsual1,bitmapUsual2,bitmapDTSH1,bitmapDTSH2,bitmapDTS1,bitmapDTS2,bitmapDTH1,bitmapDTH2,bitmapDSH1,bitmapDSH2,bitmapTSH1,bitmapTSH2,bitmapDH1,bitmapDH2,bitmapDS1,bitmapDS2,bitmapDT1,bitmapDT2,bitmapSH1,bitmapSH2,bitmapTH1,bitmapTH2,bitmapTS1,bitmapTS2, bitmapD1,bitmapD2,bitmapT1,bitmapT2,bitmapS1,bitmapS2,bitmapH1,bitmapH2,bitmapSmile1,bitmapSmile2,eatBitmap[1],eatBitmap[2],eatBitmap[3],eatBitmap[4],eatBitmap[5],eatBitmap[6],eatBitmap[7],eatBitmap[8],eatBitmap[9],eatBitmap[10],playBitmap[1],playBitmap[2],playBitmap[3],playBitmap[4], playBitmap[5],playBitmap[6],playBitmap[7],playBitmap[8],playBitmap[9],playBitmap[10],playBitmap[11],playBitmap[12],playBitmap[13],playBitmap[14],playBitmap[15],playBitmap[16],playBitmap[17],playBitmap[18],playBitmap[19],playBitmap[20],playBitmapD[1],playBitmapD[2],playBitmapD[3], playBitmapD[4],playBitmapD[5],playBitmapD[6],playBitmapD[7],playBitmapD[8],playBitmapD[9],playBitmapD[10],playBitmapD[11],playBitmapD[12],playBitmapD[13],playBitmapD[14],playBitmapD[15],playBitmapD[16],playBitmapD[17],playBitmapD[18],playBitmapD[19],playBitmapD[20],playBitmapT[1], playBitmapT[2],playBitmapT[3],playBitmapT[4],playBitmapT[5],playBitmapT[6],playBitmapT[7],playBitmapT[8],playBitmapT[9],playBitmapT[10],playBitmapT[11],playBitmapT[12],playBitmapT[13],playBitmapT[14],playBitmapT[15],playBitmapT[16],playBitmapT[17],playBitmapT[18],playBitmapT[19],
-            playBitmapT[20],playBitmapDT[1],playBitmapDT[2],playBitmapDT[3],playBitmapDT[4],playBitmapDT[5],playBitmapDT[6],playBitmapDT[7],playBitmapDT[8],playBitmapDT[9],playBitmapDT[10],playBitmapDT[11],playBitmapDT[12],playBitmapDT[13],playBitmapDT[14],playBitmapDT[15],playBitmapDT[16],
-            playBitmapDT[17],playBitmapDT[18],playBitmapDT[19],playBitmapDT[20],flyBitmapUsual[1],flyBitmapUsual[2],flyBitmapUsual[3],flyBitmapUsual[4],flyBitmapDH[1],flyBitmapDH[2],flyBitmapDH[3],flyBitmapDH[4],flyBitmapD[1],flyBitmapD[2],flyBitmapD[3],flyBitmapD[4],
-            flyBitmapDS[1],flyBitmapDS[2],flyBitmapDS[3],flyBitmapDS[4],flyBitmapH[1],flyBitmapH[2],flyBitmapH[3],flyBitmapH[4],flyBitmapSmile[1],flyBitmapSmile[2],flyBitmapSmile[3],flyBitmapSmile[4],flyBitmapSDH[1],flyBitmapSDH[2],flyBitmapSDH[3],flyBitmapSDH[4],flyBitmapSH[1],
-            flyBitmapSH[2],flyBitmapSH[3],flyBitmapSH[4],flyBitmapS[1],flyBitmapS[2],flyBitmapS[3],flyBitmapS[4],flyBitmapTDH[1],flyBitmapTDH[2],flyBitmapTDH[3],flyBitmapTDH[4],flyBitmapTDSH[1],flyBitmapTDSH[2],flyBitmapTDSH[3],flyBitmapTDSH[4]
-            };
     private volatile boolean running = true;
     private Class<Activity> activityClass;
     private Paint paint = new Paint();
@@ -182,10 +173,175 @@ public class DrawThread extends Thread {
         sharedPreferences = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         foin = sharedPreferences.getInt("FOIN", 0);
-        level = sharedPreferences.getInt("LVL", 1);
-        for (int i = 0; i < contentsArray.length; i++) {
-            bitmapsArray[i] = BitmapFactory.decodeResource(context.getResources(),contentsArray[i]);
-        }
+        level = sharedPreferences.getInt("LEVEL", 1);
+        bitmapUsual1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.sovorakan1);
+        bitmapUsual2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.sovorakan2);
+        bitmapDTSH1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_t_s_h_1);
+        bitmapDTSH2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_t_s_h_2);
+        bitmapDTS1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_t_s_1);
+        bitmapDTS2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_t_s_2);
+        bitmapDTH1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_t_h_1);
+        bitmapDTH2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_t_h_2);
+        bitmapDSH1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_s_h_1);
+        bitmapDSH2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_s_h_2);
+        bitmapTSH1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.t_s_h_1);
+        bitmapTSH2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.t_s_h_2);
+        bitmapDH1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_h_1);
+        bitmapDH2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_h_2);
+        bitmapDS1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_s_1);
+        bitmapDS2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_s_2);
+        bitmapDT1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_t_1);
+        bitmapDT2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_t_2);
+        bitmapSH1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.s_h_1);
+        bitmapSH2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.s_h_2);
+        bitmapTH1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.t_h_1);
+        bitmapTH2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.t_h_2);
+        bitmapTS1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.t_s_1);
+        bitmapTS2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.t_s_2);
+        bitmapD1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.kextot1);
+        bitmapD2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.kextot2);
+        bitmapT1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.hognac1);
+        bitmapT2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.hognac2);
+        bitmapS1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.txur1);
+        bitmapS2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.txur2);
+        bitmapH1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.sovac1);
+        bitmapH2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.sovac2);
+        bitmapSmile1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.urax1);
+        bitmapSmile2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.urax2);
+        eatBitmap[1] = BitmapFactory.decodeResource(context.getResources(),R.drawable.utox1);
+        eatBitmap[2] = BitmapFactory.decodeResource(context.getResources(),R.drawable.utox2);
+        eatBitmap[3] = BitmapFactory.decodeResource(context.getResources(),R.drawable.utox3);
+        eatBitmap[4] = BitmapFactory.decodeResource(context.getResources(),R.drawable.utox4);
+        eatBitmap[5] = BitmapFactory.decodeResource(context.getResources(),R.drawable.utox5);
+        eatBitmap[6] = BitmapFactory.decodeResource(context.getResources(),R.drawable.utox6);
+        eatBitmap[7] = BitmapFactory.decodeResource(context.getResources(),R.drawable.utox7);
+        eatBitmap[8] = BitmapFactory.decodeResource(context.getResources(),R.drawable.utox8);
+        eatBitmap[9] = BitmapFactory.decodeResource(context.getResources(),R.drawable.utox9);
+        eatBitmap[10] = BitmapFactory.decodeResource(context.getResources(),R.drawable.utox10);
+        playBitmap[1] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox1);
+        playBitmap[2] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox2);
+        playBitmap[3] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox3);
+        playBitmap[4] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox4);
+        playBitmap[5] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox5);
+        playBitmap[6] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox6);
+        playBitmap[7] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox7);
+        playBitmap[8] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox8);
+        playBitmap[9] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox9);
+        playBitmap[10] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox10);
+        playBitmap[11] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox11);
+        playBitmap[12] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox12);
+        playBitmap[13] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox13);
+        playBitmap[14] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox14);
+        playBitmap[15] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox15);
+        playBitmap[16] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox16);
+        playBitmap[17] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox17);
+        playBitmap[18] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox18);
+        playBitmap[19] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox19);
+        playBitmap[20] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox20);
+        playBitmapD[1] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox1);
+        playBitmapD[2] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox2);
+        playBitmapD[3] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox3);
+        playBitmapD[4] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox4);
+        playBitmapD[5] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox5);
+        playBitmapD[6] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox6);
+        playBitmapD[7] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox7);
+        playBitmapD[8] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox8);
+        playBitmapD[9] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox9);
+        playBitmapD[10] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox10);
+        playBitmapD[11] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox11);
+        playBitmapD[12] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox12);
+        playBitmapD[13] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox13);
+        playBitmapD[14] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox14);
+        playBitmapD[15] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox15);
+        playBitmapD[16] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox16);
+        playBitmapD[17] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox17);
+        playBitmapD[18] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox18);
+        playBitmapD[19] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox19);
+        playBitmapD[20] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox20);
+        playBitmapT[1] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox1);
+        playBitmapT[2] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox2);
+        playBitmapT[3] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox3);
+        playBitmapT[4] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox4);
+        playBitmapT[5] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox5);
+        playBitmapT[6] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox6);
+        playBitmapT[7] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox7);
+        playBitmapT[8] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox8);
+        playBitmapT[9] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox9);
+        playBitmapT[10] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox10);
+        playBitmapT[11] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox11);
+        playBitmapT[12] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox12);
+        playBitmapT[13] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox13);
+        playBitmapT[14] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox14);
+        playBitmapT[15] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox15);
+        playBitmapT[16] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox16);
+        playBitmapT[17] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox17);
+        playBitmapT[18] = BitmapFactory.decodeResource(context.getResources(),R.drawable.xaxacox18);
+        playBitmapT[19] = BitmapFactory.decodeResource(context.getResources(),R.drawable.t_xaxacox19);
+        playBitmapT[20] = BitmapFactory.decodeResource(context.getResources(),R.drawable.t_xaxacox20);
+        playBitmapDT[1] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox1);
+        playBitmapDT[2] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox2);
+        playBitmapDT[3] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox3);
+        playBitmapDT[4] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox4);
+        playBitmapDT[5] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox5);
+        playBitmapDT[6] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox6);
+        playBitmapDT[7] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox7);
+        playBitmapDT[8] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox8);
+        playBitmapDT[9] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox9);
+        playBitmapDT[10] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox10);
+        playBitmapDT[11] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox11);
+        playBitmapDT[12] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox12);
+        playBitmapDT[13] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox13);
+        playBitmapDT[14] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox14);
+        playBitmapDT[15] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox15);
+        playBitmapDT[16] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox16);
+        playBitmapDT[17] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox17);
+        playBitmapDT[18] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_xaxacox18);
+        playBitmapDT[19] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_t_xaxacox19);
+        playBitmapDT[20] = BitmapFactory.decodeResource(context.getResources(),R.drawable.d_t_xaxacox20);
+        flyBitmapUsual[1] = BitmapFactory.decodeResource(context.getResources(),R.drawable.trnox_cit1);
+        flyBitmapUsual[2] = BitmapFactory.decodeResource(context.getResources(),R.drawable.trnox_cit2);
+        flyBitmapUsual[3] = BitmapFactory.decodeResource(context.getResources(),R.drawable.trnox_cit3);
+        flyBitmapUsual[4] = BitmapFactory.decodeResource(context.getResources(),R.drawable.trnox_cit4);
+        flyBitmapDH[1] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_d_h1);
+        flyBitmapDH[2] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_d_h2);
+        flyBitmapDH[3] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_d_h3);
+        flyBitmapDH[4] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_d_h4);
+        flyBitmapD[1] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_d1);
+        flyBitmapD[2] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_d2);
+        flyBitmapD[3] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_d3);
+        flyBitmapD[4] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_d4);
+        flyBitmapDS[1] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_d_s1);
+        flyBitmapDS[2] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_d_s2);
+        flyBitmapDS[3] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_d_s3);
+        flyBitmapDS[4] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_d_s4);
+        flyBitmapH[1] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_h1);
+        flyBitmapH[2] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_h2);
+        flyBitmapH[3] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_h3);
+        flyBitmapH[4] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_h4);
+        flyBitmapSmile[1] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_hp1);
+        flyBitmapSmile[2] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_hp2);
+        flyBitmapSmile[3] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_hp3);
+        flyBitmapSmile[4] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_hp4);
+        flyBitmapSDH[1] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_s_d_h1);
+        flyBitmapSDH[2] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_s_d_h2);
+        flyBitmapSDH[3] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_s_d_h3);
+        flyBitmapSDH[4] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_s_d_h4);
+        flyBitmapSH[1] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_s_h1);
+        flyBitmapSH[2] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_s_h2);
+        flyBitmapSH[3] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_s_h3);
+        flyBitmapSH[4] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_s_h4);
+        flyBitmapS[1] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_s1);
+        flyBitmapS[2] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_s2);
+        flyBitmapS[3] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_s3);
+        flyBitmapS[4] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_s4);
+        flyBitmapTDH[1] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_t_d_h1);
+        flyBitmapTDH[2] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_t_d_h2);
+        flyBitmapTDH[3] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_d_h3);
+        flyBitmapTDH[4] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_d_h4);
+        flyBitmapTDSH[1] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_t_d_s_h1);
+        flyBitmapTDSH[2] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_t_d_s_h2);
+        flyBitmapTDSH[3] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_s_d_h3);
+        flyBitmapTDSH[4] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_s_d_h4);
         flyBitmapTDS[1] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_t_d_s1);
         flyBitmapTDS[2] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_t_d_s2);
         flyBitmapTDS[3] = BitmapFactory.decodeResource(context.getResources(),R.drawable.f_d_s3);
@@ -804,6 +960,16 @@ public class DrawThread extends Thread {
                     float dirtBottom = (float) canvas.getHeight() * 79 / 540;
                     canvas.drawRect((float) canvas.getWidth() * 876 / 1050, (float) canvas.getHeight() * 54 / 540,
                             (float) canvas.getWidth() * 1041 / 1050, (float) canvas.getHeight() * 80 / 540, paintBlack);
+                    if(dirtRight-timePassed <= dirtLeft) {
+                        dirtRight = dirtLeft;
+                        editor.putFloat("DIRT",dirtRight);
+                        editor.apply();
+                    }
+                    else{
+                        dirtRight = dirtRight-timePassed;
+                        editor.putFloat("DIRT",dirtRight);
+                        editor.apply();
+                    }
                     canvas.drawRect(dirtLeft, dirtTop, dirtRight, dirtBottom, paintDirt);
                     // kexti timer
                     if (!dirtTimeIsPassed) {
@@ -1810,7 +1976,7 @@ public class DrawThread extends Thread {
                         if (levelRight <= lvl + levelRight3) {
                             if (levelRight + lvl > levelRight2) {
                                 level++;
-                                editor.putInt("LVL",level);
+                                editor.putInt("LEVEL",level);
                                 editor.apply();
                                 levelRight = levelLeft;
                                 editor.putFloat("LEVELRIGHT", levelRight);
@@ -1832,6 +1998,7 @@ public class DrawThread extends Thread {
                     }
                     // cit
                     canvas.drawBitmap(bitmap,(float) canvas.getWidth() *birdX,(float) canvas.getHeight()*birdY,paint);
+                    canvas.drawText(timePassed+"",500,500,paintDirt);
                 } finally {
                     surfaceHolder.unlockCanvasAndPost(canvas);
                 }
