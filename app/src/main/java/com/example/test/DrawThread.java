@@ -1956,6 +1956,10 @@ public class DrawThread extends Thread {
                     }
                     screenshotBitmap = Bitmap.createScaledBitmap(screenshotBitmap,canvas.getWidth() * 73/1050,canvas.getHeight()*73/540,true);
                     canvas.drawBitmap(screenshotBitmap, (float) canvas.getWidth() *screenshotX,(float) canvas.getHeight()*screenshotY,paint);
+                    // xanut
+                    if(lastTouchX >= shopButtonLeft && lastTouchX <= (shopButtonLeft + shopButtonWidth) && lastTouchY >= (shopButtonTop) && lastTouchY <= (shopButtonTop + shopButtonHeight)){
+                        context.startActivity(new Intent(((Activity)context),ShopSkin.class));
+                    }
                     //lvl+
                     if(bitmap1==bitmapSmile1 && statChecker) {
                         statChecker = false;

@@ -22,7 +22,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class MyDraw extends SurfaceView implements SurfaceHolder.Callback{
-    private int timepassed;
+    private final int timepassed;
     public MyDraw(Context context, int timepassed) {
         super(context);
         this.timepassed = timepassed;
