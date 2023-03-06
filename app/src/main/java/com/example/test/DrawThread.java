@@ -951,7 +951,7 @@ public class DrawThread extends Thread {
                     canvas.drawRect((float) canvas.getWidth() * 843 / 1050, (float) canvas.getHeight() * 7 / 540,
                             (float) canvas.getWidth() * 1041 / 1050, (float) canvas.getHeight() * 43 / 540, paintBlack);
                     canvas.drawRect(levelLeft, levelTop, levelRight, levelBottom, paintLevel);
-                    // kextotutyun
+                    // kextotutyunс
                     paintDirt.setColor(dirtColor);
                     float dirtLeft = (float) canvas.getWidth() * 877 / 1050;
                     float dirtTop = (float) canvas.getHeight() * 55 / 540;

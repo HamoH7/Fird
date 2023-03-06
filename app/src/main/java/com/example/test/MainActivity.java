@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         timePassed = ((timeText.indexOf(0)*10+timeText.indexOf(1))*3600)+((timeText.indexOf(3)*10+timeText.indexOf(4))*60)+((timeText.indexOf(6)*10+timeText.indexOf(7)));
         timePassedsp = getApplicationContext().getSharedPreferences("TIMEPASSED", MODE_PRIVATE);
         editor = timePassedsp.edit();
-        setContentView(new MyDraw(this, timePassed - timePassedsp.getInt("TIMEPASSED", timePassed)));
+        setContentView(new MyDraw(this, timePassed - timePassedsp.getInt("TIMEPASSED",timePassed)));
         //setContentView(R.layout.shopskin);
     }
     @Override
@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         timeText = timeFormat.format(currentDate);
         timePassed = ((timeText.indexOf(0)*10+timeText.indexOf(1))*3600)+((timeText.indexOf(3)*10+timeText.indexOf(4))*60)+((timeText.indexOf(6)*10+timeText.indexOf(7)));
         editor.putInt("TIMEPASSED",timePassed);
+        editor.apply();
     }
     @Override
     protected void onStop() {
@@ -56,5 +57,6 @@ public class MainActivity extends AppCompatActivity {
         timeText = timeFormat.format(currentDate);
         timePassed = ((timeText.indexOf(0)*10+timeText.indexOf(1))*3600)+((timeText.indexOf(3)*10+timeText.indexOf(4))*60)+((timeText.indexOf(6)*10+timeText.indexOf(7)));
         editor.putInt("TIMEPASSED",timePassed);
+        editor.apply();
     }
 }
